@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "904978222055",
+    "firebase_url": "https://harcoapp.firebaseio.com",
+    "project_id": "harcoapp",
+    "storage_bucket": "harcoapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:904978222055:android:2c7bca45ece26add9d8b42",
+        "android_client_info": {
+          "package_name": "com.inersya.harcoapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "904978222055-t48jbju6gp0iv557eatcghlamigle0ap.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.inersya.harcoapp",
+            "certificate_hash": "435de6f54b82fbf5f65f0f6cdd19602090f31151"
+          }
+        },
+        {
+          "client_id": "904978222055-qs5a7m6hl89rvgmvpguuorqldbjveaao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyATmZ1YERzI2gUIxBvBl8w9RwfhnVW5Uxs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "904978222055-qs5a7m6hl89rvgmvpguuorqldbjveaao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
