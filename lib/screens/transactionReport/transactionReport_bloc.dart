@@ -40,7 +40,7 @@ class TransactionReportBloc extends TransBaseHelper {
         customDt = DateTime(dt.year - 1, dt.month, 1);
         break;
       case 'all':
-        customDt = DateTime(1970);
+        customDt = DateTime(2019);
         break;
       default:
         customDt = DateTime(dt.year, dt.month, dt.day - dt.weekday);

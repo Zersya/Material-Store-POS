@@ -24,6 +24,7 @@ class HomeBloc extends TransBaseHelper {
       transactions = val.documents
           .map((val) => prefTrans.Transaction.fromMap(val.data))
           .toList();
+      transactions = transactions.reversed.toList();
       this.subjectTransactions.sink.add(transactions);
       this.subjectResponse.sink.add(response);
 

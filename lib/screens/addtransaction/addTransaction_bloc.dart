@@ -17,11 +17,13 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
   BehaviorSubject<String> subjectUnitValue;
   BehaviorSubject<List<Unit>> _subjectListUnit;
   BehaviorSubject<List<Item>> _subjectListItem;
+  BehaviorSubject<List<String>> _subjectListCustomer;
   BehaviorSubject<List<Item>> subjectCart;
   BehaviorSubject<bool> subjectIsNewItem;
 
   List<Item> items = List();
   List<Item> cart = List();
+  List<String> customers = List();
 
   AddTransactionBloc() {
     subjectUnitValue = BehaviorSubject<String>();
@@ -29,6 +31,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     _subjectListItem = BehaviorSubject<List<Item>>();
     subjectCart = BehaviorSubject<List<Item>>();
     subjectIsNewItem = BehaviorSubject<bool>();
+    _subjectListCustomer = BehaviorSubject<List<String>>();
 
     subjectIsNewItem.sink.add(true);
   }
@@ -38,6 +41,23 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
   ValueStream<List<Item>> get itemListStream => _subjectListItem.stream;
   ValueStream<List<Item>> get cartStream => subjectCart.stream;
   ValueStream<bool> get isNewItemStream => subjectIsNewItem.stream;
+  ValueStream<List<String>> get customerListStream =>
+      _subjectListCustomer.stream;
+
+  void insert2Cart(Item item) {
+    cart.insert(0, item);
+    this.subjectCart.sink.add(cart);
+  }
+
+  void removeFromCart(int index) {
+    cart.removeAt(index);
+    this.subjectCart.sink.add(cart);
+  }
+
+  void clearCart() {
+    cart.clear();
+    this.subjectCart.sink.add(cart);
+  }
 
   Future fetchUnit() async {
     this.subjectState.sink.add(FormState.LOADING);
@@ -53,19 +73,20 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     listen.onDone(() => listen.cancel());
   }
 
-  void insert2Cart(Item item) {
-    cart.insert(0, item);
-    this.subjectCart.sink.add(cart);
-  }
+  Future fetchCustomers() async {
+    this.subjectState.sink.add(FormState.LOADING);
+    MyResponse<Stream<QuerySnapshot>> response =
+        await _transactionService.fetchCustomers();
 
-  void removeFromCart(int index) {
-    cart.removeAt(index);
-    this.subjectCart.sink.add(cart);
-  }
-
-  void clearCart() {
-    cart.clear();
-    this.subjectCart.sink.add(cart);
+    final listen = response.result.listen((list) {
+      customers = List<String>.from(list.documents.map((val) => val.data['name']).toList());
+      // customers = list.documents.map((val) => val.data).toList();
+      
+      this._subjectListCustomer.sink.add(customers);
+      this.subjectResponse.sink.add(response);
+      this.subjectState.sink.add(FormState.IDLE);
+    });
+    listen.onDone(() => listen.cancel());
   }
 
   Future fetchItem() async {
@@ -97,7 +118,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     this.subjectState.sink.add(FormState.IDLE);
   }
 
-  Future createTransaction(int sumTotal) async {
+  Future createTransaction(int sumTotal, String customerName) async {
     this.subjectState.sink.add(FormState.LOADING);
 
     int sumProfit = 0;
@@ -109,7 +130,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     });
 
     prefTrans.Transaction transaction = prefTrans.Transaction(
-        'maemunah',
+        customerName,
         cart,
         sumProfit,
         sumTotal,
@@ -117,7 +138,10 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
         DateTime.now().millisecondsSinceEpoch);
 
     MyResponse response =
-        await _transactionService.createTransaction(transaction);
+        await _transactionService.createCustomer(customerName);
+    this.subjectResponse.sink.add(response);
+
+    response = await _transactionService.createTransaction(transaction);
 
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(FormState.IDLE);
@@ -125,9 +149,11 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
   }
 
   void dispose() {
-    subjectUnitValue.close();
     _subjectListUnit.close();
     _subjectListItem.close();
+    _subjectListCustomer.close();
+
+    subjectUnitValue.close();
     subjectCart.close();
     subjectIsNewItem.close();
   }
