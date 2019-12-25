@@ -19,7 +19,9 @@ class AddTransactionScreen extends StatefulWidget {
 }
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
+  TextEditingController _controllerCustomerName = TextEditingController();
   TextEditingController _controllerName = TextEditingController();
+
   MoneyMaskedTextController _controllerPriceBuy = MoneyMaskedTextController(
       thousandSeparator: '.',
       initialValue: 0,
@@ -38,6 +40,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   TextEditingController _controllerUnit = TextEditingController();
 
+  FocusNode _nodeCustomerName = FocusNode();
   FocusNode _nodeName = FocusNode();
   FocusNode _nodePriceBuy = FocusNode();
   FocusNode _nodePriceSell = FocusNode();
@@ -50,8 +53,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   AddTransactionBloc _addTransactionBloc = AddTransactionBloc();
 
-  
-
   Item _suggestion;
 
   @override
@@ -59,14 +60,17 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     super.initState();
     _addTransactionBloc.responseStream.listen((response) {
       if (response.message != null) {
+        
         _scaffoldKey.currentState.showSnackBar(
           SnackBar(
             content: Text(response.message),
             backgroundColor: Theme.of(context).colorScheme.surface,
+            duration: Duration(seconds: 2),
           ),
         );
       }
     });
+    _addTransactionBloc.fetchCustomers();
     _addTransactionBloc.fetchItem();
     _addTransactionBloc.fetchUnit();
   }
@@ -124,7 +128,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     _addTransactionBloc.subjectIsNewItem.sink.add(true);
   }
 
-  void _setSuggestion(Item suggestion) {
+  void _setSuggestionCustomer(String name){
+    _controllerCustomerName.text = name;
+  }
+
+  void _setSuggestionItem(Item suggestion) {
     _controllerName.text = suggestion.name;
     _controllerPriceBuy.text = suggestion.priceBuy;
     _controllerPriceSell.text = suggestion.priceSell;
@@ -187,7 +195,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               child: Text('Submit'),
               onPressed: () {
                 Navigator.pop(context);
-                _addTransactionBloc.createTransaction(sum);
+                _addTransactionBloc.createTransaction(
+                    sum, _controllerCustomerName.text);
               },
             ),
           ],
@@ -197,7 +206,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               physics: ScrollPhysics(),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  Text(
+                    'Pembeli: ${_controllerCustomerName.text}',
+                    style: Theme.of(context).textTheme.subtitle,
+                  ),
+                  Divider(
+                    height: 16,
+                    color: Colors.black87,
+                  ),
                   ListView.separated(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -263,6 +281,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             },
           )
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(62.0),
+          child: Theme(
+            data: Theme.of(context).copyWith(primaryColor: Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: fieldNameCustomer(context),
+            ),
+          ),
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Row(
@@ -272,10 +300,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 color: Theme.of(context).colorScheme.primary,
                 child: Text('Batalkan'),
                 onPressed: () {
-                  if(_addTransactionBloc.cartStream.value == null){
+                  if (_addTransactionBloc.cartStream.value == null) {
                     return;
-                  }
-                  else if (_addTransactionBloc.cartStream.value.length > 0) {
+                  } else if (_addTransactionBloc.cartStream.value.length > 0) {
                     _dialogCancel(context);
                   }
                 },
@@ -332,46 +359,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      TypeAheadField(
-                        hideOnEmpty: true,
-                        textFieldConfiguration: TextFieldConfiguration(
-                            controller: _controllerName,
-                            focusNode: _nodeName,
-                            autofocus: true,
-                            decoration: InputDecoration(
-                              labelText: 'Nama barang',
-                            ),
-                            onChanged: (val) {
-                              if (val.isEmpty) {
-                                _addTransactionBloc.subjectIsNewItem.sink
-                                    .add(true);
-                              }
-                            },
-                            onSubmitted: (val) {
-                              FocusScope.of(context)
-                                  .requestFocus(_nodePriceBuy);
-                            }),
-                        suggestionsCallback: (pattern) {
-                          return _addTransactionBloc.itemListStream.value
-                              .where((val) =>
-                                  val.name.contains(pattern.toLowerCase()))
-                              .toList();
-                        },
-                        itemBuilder: (context, suggestion) {
-                          return ListTile(
-                            leading: Icon(Icons.shopping_cart),
-                            title: Text(suggestion.name),
-                            subtitle: Text(fmf
-                                .copyWith(
-                                    amount: double.parse(suggestion.priceBuy))
-                                .output
-                                .symbolOnLeft),
-                          );
-                        },
-                        onSuggestionSelected: (suggestion) {
-                          _setSuggestion(suggestion);
-                        },
-                      ),
+                      fieldItemName(context),
                       SizedBox(
                         height: 16.0,
                       ),
@@ -488,6 +476,80 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               })
         ],
       ),
+    );
+  }
+
+  TypeAheadField<String> fieldNameCustomer(BuildContext context) {
+    return TypeAheadField(
+      hideOnEmpty: true,
+      textFieldConfiguration: TextFieldConfiguration(
+          controller: _controllerCustomerName,
+          focusNode: _nodeCustomerName,
+          autofocus: false,
+          decoration: InputDecoration(
+            labelText: 'Nama Pembeli',
+          ),
+          onChanged: (val) {
+            // if (val.isEmpty) {
+            //   _addTransactionBloc.subjectIsNewItem.sink.add(true);
+            // }
+          },
+          onSubmitted: (val) {
+            FocusScope.of(context).requestFocus(_nodeName);
+          }),
+      suggestionsCallback: (pattern) {
+        return _addTransactionBloc.customerListStream.value
+            .where((val) => val.contains(pattern))
+            .toList();
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          leading: Icon(Icons.person),
+          title: Text(suggestion),
+        );
+      },
+      onSuggestionSelected: (suggestion) {
+        _setSuggestionCustomer(suggestion);
+      },
+    );
+  }
+
+  TypeAheadField<Item> fieldItemName(BuildContext context) {
+    return TypeAheadField(
+      hideOnEmpty: true,
+      textFieldConfiguration: TextFieldConfiguration(
+          controller: _controllerName,
+          focusNode: _nodeName,
+          autofocus: false,
+          decoration: InputDecoration(
+            labelText: 'Nama barang',
+          ),
+          onChanged: (val) {
+            if (val.isEmpty) {
+              _addTransactionBloc.subjectIsNewItem.sink.add(true);
+            }
+          },
+          onSubmitted: (val) {
+            FocusScope.of(context).requestFocus(_nodePriceBuy);
+          }),
+      suggestionsCallback: (pattern) {
+        return _addTransactionBloc.itemListStream.value
+            .where((val) => val.name.contains(pattern.toLowerCase()))
+            .toList();
+      },
+      itemBuilder: (context, suggestion) {
+        return ListTile(
+          leading: Icon(Icons.shopping_cart),
+          title: Text(suggestion.name),
+          subtitle: Text(fmf
+              .copyWith(amount: double.parse(suggestion.priceBuy))
+              .output
+              .symbolOnLeft),
+        );
+      },
+      onSuggestionSelected: (suggestion) {
+        _setSuggestionItem(suggestion);
+      },
     );
   }
 }

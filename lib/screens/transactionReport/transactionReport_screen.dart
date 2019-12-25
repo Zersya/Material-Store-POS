@@ -99,7 +99,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                       child: StreamBuilder<Map<String, dynamic>>(
                           stream: _reportBloc.subjectTimeMap,
                           initialData: {
-                            'start': DateTime(1970),
+                            'start': DateTime(2019),
                             'end': DateTime.now()
                           },
                           builder: (context, snapshot) {
@@ -108,7 +108,8 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                             return StreamBuilder<List<Transaction>>(
                                 stream: _reportBloc.transStream,
                                 builder: (context, snapshot) {
-                                  if (snapshot.hasData) {
+                                  if (snapshot.hasData &&
+                                      snapshot.data.length > 0) {
                                     List<Map<String, dynamic>> list = List();
                                     _reportBloc.transStream.value
                                         .forEach((val) {
@@ -172,7 +173,6 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
       series: [
         BezierLine(
           label: "Profit",
-          
           data: data
               .map((val) =>
                   DataPoint<DateTime>(value: val['value'], xAxis: val['date']))
@@ -183,10 +183,9 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
         verticalIndicatorStrokeWidth: 3.0,
         verticalIndicatorColor: Colors.black26,
         showVerticalIndicator: true,
-        verticalIndicatorFixedPosition: true,
+        verticalIndicatorFixedPosition: false,
         pinchZoom: true,
-        displayYAxis: true,
-        displayLinesXAxis: true,
+        displayLinesXAxis: false,
         showDataPoints: true,
         backgroundColor: Theme.of(context).colorScheme.secondary,
         footerHeight: 50.0,
