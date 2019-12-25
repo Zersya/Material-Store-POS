@@ -93,7 +93,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       Item item = _suggestion;
       newItem = Item(_controllerName.text.toLowerCase(), priceBuy, priceSell,
           _addTransactionBloc.unitStream.value, User('mail@mail.com'),
-          createdAt: item.createdAt, pcs: int.parse(pcs));
+          createdAt: item.createdAt, pcs: int.parse(pcs), id: _suggestion.id);
     } else {
       newItem = Item(
         _controllerName.text.toLowerCase(),
@@ -108,7 +108,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     }
 
     newItem.pcs = int.parse(pcs);
-    _addTransactionBloc.setCart(newItem);
+    _addTransactionBloc.insert2Cart(newItem);
     _resetField();
   }
 
@@ -179,12 +179,19 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         return AlertDialog(
           title: Text('Ringkasan'),
           actions: <Widget>[
-            FlatButton(child: Text('Batal'), onPressed: (){
-              Navigator.pop(context);
-            },),
-            FlatButton(child: Text('Submit'), onPressed: (){
-              
-            },),
+            FlatButton(
+              child: Text('Batal'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text('Submit'),
+              onPressed: () {
+                _addTransactionBloc.createTransaction(sum);
+                Navigator.pop(context);
+              },
+            ),
           ],
           content: Container(
             width: 300,
@@ -345,7 +352,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                             }),
                         suggestionsCallback: (pattern) {
                           return _addTransactionBloc.itemListStream.value
-                              .where((val) => val.name.contains(pattern))
+                              .where((val) =>
+                                  val.name.contains(pattern.toLowerCase()))
                               .toList();
                         },
                         itemBuilder: (context, suggestion) {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:harco_app/services/item_service.dart';
+import 'package:harco_app/services/transaction_service.dart';
 
 GetIt getIt = GetIt.instance;
 
@@ -11,5 +12,7 @@ void locator(Firestore firestore, bool isTest) {
   }
 
   getIt.registerLazySingleton<ItemService>(() => ItemService(firestore));
+  getIt.registerLazySingleton<TransactionService>(() => TransactionService(firestore));
+  
   
 }
