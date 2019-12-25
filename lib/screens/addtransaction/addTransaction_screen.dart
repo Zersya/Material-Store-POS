@@ -272,7 +272,10 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 color: Theme.of(context).colorScheme.primary,
                 child: Text('Batalkan'),
                 onPressed: () {
-                  if (_addTransactionBloc.cartStream.value.length > 0) {
+                  if(_addTransactionBloc.cartStream.value == null){
+                    return;
+                  }
+                  else if (_addTransactionBloc.cartStream.value.length > 0) {
                     _dialogCancel(context);
                   }
                 },

@@ -14,7 +14,7 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.3.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -31,6 +31,7 @@ dependencies:
   flutter_masked_text: ^0.8.0
   flutter_money_formatter: ^0.8.3
   flutter_typeahead: ^1.7.0
+  bezier_chart: any
 
 dev_dependencies:
   flutter_test:
