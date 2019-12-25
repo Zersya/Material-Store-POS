@@ -41,8 +41,26 @@ class TransactionService {
       Stream<QuerySnapshot> snapshot = firestore
           .collection('transactions')
           .where('createdAt',
-              isGreaterThan: new DateTime(now.year, now.month, now.day - 1, 6, 30).millisecondsSinceEpoch)
+              isGreaterThan:
+                  new DateTime(now.year, now.month, now.day - 1, 6, 30)
+                      .millisecondsSinceEpoch)
           .snapshots();
+
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
+          message: null);
+    } on SocketException {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Kesalahan jaringan');
+    } on Exception {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Terjadi kesalahan');
+    }
+  }
+
+  Future<MyResponse> fetchTransactionAll() async {
+    try {
+      Stream<QuerySnapshot> snapshot =
+          firestore.collection('transactions').snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);

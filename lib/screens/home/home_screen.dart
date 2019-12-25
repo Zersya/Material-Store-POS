@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get_it/get_it.dart';
 import 'package:harco_app/helper/routerHelper.dart';
-import 'package:harco_app/models/item.dart';
-import 'package:harco_app/models/transaction.dart' as prefTrans;
 import 'package:harco_app/screens/home/home_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
+import 'package:harco_app/utils/enum.dart';
+import 'package:harco_app/widgets/curTransaction.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -43,9 +42,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: CardTop(
-                      homeBloc: _homeBloc,
-                    ),
+                    child: StreamBuilder<ViewState>(
+                        stream: _homeBloc.stateStream,
+                        initialData: ViewState.LOADING,
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData ||
+                              snapshot.data == ViewState.LOADING) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          return CardTop(
+                            homeBloc: _homeBloc,
+                          );
+                        }),
                   ),
                 ],
               ),
@@ -77,8 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     FeatureItem(
                       icon: FontAwesomeIcons.list,
-                      name: 'Data Transaksi',
-                      onTap: () {},
+                      name: 'Laporan Transaksi',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouterHelper.kRouteTransactionReport);
+                      },
                     ),
                   ],
                 ),
@@ -86,167 +97,22 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16.0,
               ),
-              CurTransaction(
-                scrollController: scrollController,
-                homeBloc: _homeBloc,
+              StreamBuilder<ViewState>(
+                stream: _homeBloc.stateStream,
+                initialData: ViewState.LOADING,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData || snapshot.data == ViewState.LOADING) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  return CurTransaction(
+                    title: 'Transaksi Hari ini',
+                    scrollController: scrollController,
+                    bloc: _homeBloc,
+                  );
+                },
               )
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CurTransaction extends StatelessWidget {
-  const CurTransaction(
-      {Key key, @required this.scrollController, @required this.homeBloc})
-      : super(key: key);
-
-  final ScrollController scrollController;
-
-  final HomeBloc homeBloc;
-
-  Future dialogSummary(
-      BuildContext context, prefTrans.Transaction transaction) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        List<Item> cart = transaction.items;
-
-        return AlertDialog(
-          title: Text('Ringkasan'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('Kembali'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-          content: Container(
-            width: 300,
-            child: SingleChildScrollView(
-              physics: ScrollPhysics(),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  ListView.separated(
-                    physics: ScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: cart.length,
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 1, color: Colors.black87);
-                    },
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(cart[index].name),
-                        subtitle: Text(fmf
-                            .copyWith(
-                              amount: transaction.profit.toDouble(),
-                            )
-                            .output
-                            .symbolOnLeft),
-                        trailing:
-                            Text('${cart[index].pcs} ${cart[index].unit}'),
-                      );
-                    },
-                  ),
-                  Divider(height: 3, color: Colors.black87),
-                  ListTile(
-                    title: Text('Total'),
-                    subtitle: Text(fmf
-                        .copyWith(amount: transaction.total.toDouble())
-                        .output
-                        .symbolOnLeft),
-                    trailing: RichText(
-                      text: TextSpan(
-                        text: 'Profit\n',
-                        style: Theme.of(context).textTheme.subtitle,
-                        children: [
-                          TextSpan(
-                            style: Theme.of(context).textTheme.caption,
-                            text:
-                                '${fmf.copyWith(amount: transaction.profit.toDouble()).output.symbolOnLeft}',
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: Colors.white,
-      padding: EdgeInsets.all(16.0),
-      alignment: Alignment.center,
-      child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              'Transaksi Hari Ini',
-              style: Theme.of(context).textTheme.title,
-            ),
-            Divider(
-              height: 32,
-              color: Colors.black,
-            ),
-            StreamBuilder<List<prefTrans.Transaction>>(
-                stream: homeBloc.transStream,
-                initialData: List(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<prefTrans.Transaction> transactions = snapshot.data;
-
-                    if (transactions.isEmpty) {
-                      return Center(
-                        child: Text('Tidak ada transaksi hari ini'),
-                      );
-                    }
-                    return ListView.separated(
-                      controller: scrollController,
-                      physics: ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: transactions.length,
-                      separatorBuilder: (context, index) {
-                        return Container(
-                          height: 2,
-                          color: Theme.of(context).colorScheme.surface,
-                        );
-                      },
-                      itemBuilder: (context, index) {
-                        DateTime dt = DateTime.fromMillisecondsSinceEpoch(
-                                transactions[index].createdAt)
-                            .toLocal();
-                        String dateTime = '${dt.hour}:${dt.minute}';
-                        return ListTile(
-                          title: Text(transactions[index].name),
-                          subtitle: Text(fmf
-                              .copyWith(
-                                  amount: transactions[index].total.toDouble())
-                              .output
-                              .symbolOnLeft),
-                          trailing: Text(dateTime),
-                          onTap: () =>
-                              dialogSummary(context, transactions[index]),
-                        );
-                      },
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-          ],
         ),
       ),
     );

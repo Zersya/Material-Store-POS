@@ -3,12 +3,14 @@ import 'package:harco_app/screens/addItem/addItem_screen.dart';
 import 'package:harco_app/screens/addtransaction/addTransaction_screen.dart';
 import 'package:harco_app/screens/home/home_screen.dart';
 import 'package:harco_app/screens/listItem/listItem_screen.dart';
+import 'package:harco_app/screens/transactionReport/transactionReport_screen.dart';
 
 class RouterHelper {
   static const kRouteHome = '/home';
   static const kRouteListItem = '/home/item';
   static const kRouteAddItem = '/home/item/add';
   static const kRouteAddTransaction = '/home/trasaction';
+  static const kRouteTransactionReport = '/home/transactionReport';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print(settings.name);
@@ -21,6 +23,8 @@ class RouterHelper {
         return MaterialPageRoute(builder: (_) => AddItemScreen());
       case kRouteAddTransaction:
         return MaterialPageRoute(builder: (_) => AddTransactionScreen());
+      case kRouteTransactionReport:
+        return MaterialPageRoute(builder: (_) => TransactionReportScreen());
       default:
         return MaterialPageRoute(builder: (_) => HomeScreen());
     }
