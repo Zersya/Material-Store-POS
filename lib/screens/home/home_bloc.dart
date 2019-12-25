@@ -10,15 +10,30 @@ class HomeBloc extends BaseReponseBloc<ViewState> {
   TransactionService _transactionService = GetIt.I<TransactionService>();
 
   BehaviorSubject<List<prefTrans.Transaction>> _subjectTransactions;
+  BehaviorSubject<int> _subjectProfitToday;
 
   List<prefTrans.Transaction> _transactions = List();
 
   HomeBloc() {
     _subjectTransactions = BehaviorSubject<List<prefTrans.Transaction>>();
+    _subjectProfitToday = BehaviorSubject<int>();
   }
 
   ValueStream<List<prefTrans.Transaction>> get transStream =>
       _subjectTransactions.stream;
+
+  ValueStream<int> get profitTodayStream => _subjectProfitToday.stream;
+
+  Future fetchProfitToday() async {
+    int sumProfitToday = 0;
+    _transactions.forEach((val) {
+      sumProfitToday = sumProfitToday + val.profit;
+      print(val.profit);
+    });
+
+    print(sumProfitToday);
+    _subjectProfitToday.sink.add(sumProfitToday);
+  }
 
   Future fetchTransactionToday() async {
     this.subjectState.sink.add(ViewState.LOADING);
@@ -33,6 +48,7 @@ class HomeBloc extends BaseReponseBloc<ViewState> {
       this.subjectResponse.sink.add(response);
 
       this.subjectState.sink.add(ViewState.IDLE);
+      fetchProfitToday();
     });
 
     listen.onDone(() => listen.cancel());
@@ -40,5 +56,6 @@ class HomeBloc extends BaseReponseBloc<ViewState> {
 
   void dispose() {
     _subjectTransactions.close();
+    _subjectProfitToday.close();
   }
 }
