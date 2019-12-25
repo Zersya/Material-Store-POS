@@ -32,6 +32,29 @@ class CartItem extends StatelessWidget {
                 leading: Icon(Icons.shopping_cart),
                 trailing: Text(
                     '${cart[index].pcs.toString()} ${cart[index].unit.toString()}'),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text(
+                              'Hapus ${cart[index].pcs.toString()} ${cart[index].unit.toString()} ?'),
+                          actions: <Widget>[
+                            FlatButton(
+                              child: Text('Batal'),
+                              onPressed: () => Navigator.pop(context),
+                            ),
+                            FlatButton(
+                              child: Text('Hapus'),
+                              onPressed: () {
+                                _addTransactionBloc.removeFromCart(index);
+                                Navigator.pop(context);
+                              },
+                            )
+                          ],
+                        );
+                      });
+                },
               );
             },
           );

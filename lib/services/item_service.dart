@@ -18,16 +18,18 @@ class ItemService {
       await firestore
           .collection('items')
           .document(item.id)
-          .setData(item.toMap());
+          .setData(item.toMap()).catchError((err) {
+        throw Exception(err);
+      });;
 
       return MyResponse(ResponseState.SUCCESS, item,
           message: 'Berhasil menambah barang');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
-    } on Exception {
+    } on Exception catch(err) {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Terjadi kesalahan');
+          message: err.toString());
     }
   }
 
@@ -40,7 +42,7 @@ class ItemService {
           .document(unit.id)
           .setData(unit.toMap())
           .catchError((err) {
-        print(err);
+        throw Exception(err);
       });
 
       return MyResponse(ResponseState.SUCCESS, unit,
@@ -48,9 +50,9 @@ class ItemService {
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
-    } on Exception {
+    } on Exception catch (err){
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Terjadi kesalahan');
+          message: err.toString());
     }
   }
 

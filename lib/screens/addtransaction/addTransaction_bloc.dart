@@ -4,12 +4,15 @@ import 'package:harco_app/helper/responseHelper.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/unit.dart';
 import 'package:harco_app/models/user.dart';
+import 'package:harco_app/models/transaction.dart' as prefTrans;
 import 'package:harco_app/services/item_service.dart';
+import 'package:harco_app/services/transaction_service.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AddTransactionBloc extends BaseReponseBloc<FormState> {
   ItemService _itemService = GetIt.I<ItemService>();
+  TransactionService _transactionService = GetIt.I<TransactionService>();
 
   BehaviorSubject<String> subjectUnitValue;
   BehaviorSubject<List<Unit>> _subjectListUnit;
@@ -48,11 +51,15 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
       this.subjectState.sink.add(FormState.IDLE);
     });
     listen.onDone(() => listen.cancel());
-
   }
 
-  void setCart(Item item) {
+  void insert2Cart(Item item) {
     cart.insert(0, item);
+    this.subjectCart.sink.add(cart);
+  }
+
+  void removeFromCart(int index) {
+    cart.removeAt(index);
     this.subjectCart.sink.add(cart);
   }
 
@@ -71,8 +78,6 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
       this.subjectResponse.sink.add(response);
 
       this.subjectState.sink.add(FormState.IDLE);
-      
-
     });
     listen.onDone(() => listen.cancel());
   }
@@ -90,6 +95,28 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     MyResponse response = await _itemService.createUnit(unit);
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(FormState.IDLE);
+  }
+
+  Future createTransaction(int sumTotal) async {
+    this.subjectState.sink.add(FormState.LOADING);
+
+    int sumProfit = 0;
+    cart.forEach((item) {
+      int priceSell = int.parse(item.priceSell);
+      int priceBuy = int.parse(item.priceBuy);
+
+      sumProfit = sumProfit + (priceSell - priceBuy * item.pcs);
+    });
+
+    prefTrans.Transaction transaction = prefTrans.Transaction(
+        'maemunah', cart, sumProfit, sumTotal, User('mail@mail.com'));
+
+    MyResponse response =
+        await _transactionService.createTransaction(transaction);
+
+    this.subjectResponse.sink.add(response);
+    this.subjectState.sink.add(FormState.IDLE);
+    clearCart();
   }
 
   void dispose() {
