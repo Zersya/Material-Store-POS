@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
@@ -42,7 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    child: CardTop(),
+                    child: CardTop(
+                      homeBloc: _homeBloc,
+                    ),
                   ),
                 ],
               ),
@@ -251,9 +254,9 @@ class CurTransaction extends StatelessWidget {
 }
 
 class CardTop extends StatelessWidget {
-  const CardTop({
-    Key key,
-  }) : super(key: key);
+  const CardTop({Key key, @required this.homeBloc}) : super(key: key);
+
+  final HomeBloc homeBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -266,26 +269,32 @@ class CardTop extends StatelessWidget {
           direction: Axis.horizontal,
           alignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: 120.0,
+          spacing: 100.0,
           children: <Widget>[
-            RichText(
-              text: TextSpan(
-                  text: 'Pendapatan',
-                  style: Theme.of(context).textTheme.subtitle,
-                  children: [
-                    TextSpan(
-                        text: ' Senin',
-                        style: Theme.of(context).textTheme.title)
-                  ]),
+            Text(
+              'Pendapatan ${numberToStrDay(DateTime.now().weekday)}',
+              style: Theme.of(context).textTheme.subtitle,
             ),
-            RichText(
-              text: TextSpan(
-                  text: 'Rp.',
-                  style: Theme.of(context).textTheme.overline,
-                  children: [
-                    TextSpan(
-                        text: '0', style: Theme.of(context).textTheme.title)
-                  ]),
+            StreamBuilder<int>(
+              stream: homeBloc.profitTodayStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return RichText(
+                    text: TextSpan(
+                        text: 'Rp.',
+                        style: Theme.of(context).textTheme.overline,
+                        children: [
+                          TextSpan(
+                              text: fmf
+                                  .copyWith(amount: snapshot.data.toDouble())
+                                  .output
+                                  .nonSymbol,
+                              style: Theme.of(context).textTheme.title)
+                        ]),
+                  );
+                }
+                return Container();
+              },
             )
           ],
         ),
