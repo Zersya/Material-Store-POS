@@ -105,11 +105,16 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
       int priceSell = int.parse(item.priceSell);
       int priceBuy = int.parse(item.priceBuy);
 
-      sumProfit = sumProfit + (priceSell - priceBuy * item.pcs);
+      sumProfit = sumProfit + ((priceSell - priceBuy) * item.pcs);
     });
 
     prefTrans.Transaction transaction = prefTrans.Transaction(
-        'maemunah', cart, sumProfit, sumTotal, User('mail@mail.com'));
+        'maemunah',
+        cart,
+        sumProfit,
+        sumTotal,
+        User('mail@mail.com'),
+        DateTime.now().millisecondsSinceEpoch);
 
     MyResponse response =
         await _transactionService.createTransaction(transaction);

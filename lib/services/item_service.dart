@@ -20,7 +20,7 @@ class ItemService {
           .document(item.id)
           .setData(item.toMap()).catchError((err) {
         throw Exception(err);
-      });;
+      });
 
       return MyResponse(ResponseState.SUCCESS, item,
           message: 'Berhasil menambah barang');

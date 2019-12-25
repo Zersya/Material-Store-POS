@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/screens/listItem/listItem_bloc.dart';
+import 'package:harco_app/utils/commonFunc.dart';
 
 class ListItemScreen extends StatefulWidget {
   ListItemScreen({Key key}) : super(key: key);
@@ -23,17 +23,7 @@ class _ListItemScreenState extends State<ListItemScreen>
 
   ListItemBloc _listItemBloc = ListItemBloc();
 
-  FlutterMoneyFormatter fmf = new FlutterMoneyFormatter(
-    amount: 0,
-    settings: MoneyFormatterSettings(
-        symbol: 'Rp. ',
-        thousandSeparator: '.',
-        decimalSeparator: ',',
-        symbolAndNumberSeparator: ' ',
-        fractionDigits: 0,
-        compactFormatType: CompactFormatType.short),
-  );
-
+ 
   @override
   void initState() {
     super.initState();
