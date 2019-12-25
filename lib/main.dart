@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
       subtitle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       body1: TextStyle(fontSize: 18),
       body2: TextStyle(fontSize: 18, color: Colors.grey[300]),
-      caption: TextStyle(fontSize: 14, color: Colors.black87),
+      caption: TextStyle(fontSize: 16, color: Colors.black87),
       overline: TextStyle(fontSize: 12, color: Colors.grey[500]));
 
   final ThemeData themeData = ThemeData(

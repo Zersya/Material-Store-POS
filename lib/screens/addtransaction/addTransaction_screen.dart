@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/user.dart';
 import 'package:harco_app/screens/addtransaction/addTransaction_bloc.dart';
+import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart' as prefixEnum;
 import 'package:harco_app/widgets/dropDownUnit.dart';
 
@@ -50,16 +50,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   AddTransactionBloc _addTransactionBloc = AddTransactionBloc();
 
-  FlutterMoneyFormatter fmf = new FlutterMoneyFormatter(
-    amount: 0,
-    settings: MoneyFormatterSettings(
-        symbol: 'Rp. ',
-        thousandSeparator: '.',
-        decimalSeparator: ',',
-        symbolAndNumberSeparator: ' ',
-        fractionDigits: 0,
-        compactFormatType: CompactFormatType.short),
-  );
+  
 
   Item _suggestion;
 
@@ -90,10 +81,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     Item newItem;
 
     if (!isNew) {
-      Item item = _suggestion;
-      newItem = Item(_controllerName.text.toLowerCase(), priceBuy, priceSell,
-          _addTransactionBloc.unitStream.value, User('mail@mail.com'),
-          createdAt: item.createdAt, pcs: int.parse(pcs), id: _suggestion.id);
+      newItem = Item(
+        _controllerName.text.toLowerCase(),
+        priceBuy,
+        priceSell,
+        _addTransactionBloc.unitStream.value,
+        User('mail@mail.com'),
+        createdAt: _suggestion.createdAt,
+        pcs: int.parse(pcs),
+        id: _suggestion.id,
+      );
     } else {
       newItem = Item(
         _controllerName.text.toLowerCase(),
@@ -101,6 +98,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         priceSell,
         _addTransactionBloc.unitStream.value,
         User('mail@mail.com'),
+        pcs: int.parse(pcs),
         createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
@@ -188,8 +186,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             FlatButton(
               child: Text('Submit'),
               onPressed: () {
-                _addTransactionBloc.createTransaction(sum);
                 Navigator.pop(context);
+                _addTransactionBloc.createTransaction(sum);
               },
             ),
           ],
