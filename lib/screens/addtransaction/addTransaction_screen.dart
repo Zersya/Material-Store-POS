@@ -60,7 +60,6 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     super.initState();
     _addTransactionBloc.responseStream.listen((response) {
       if (response.message != null) {
-        
         _scaffoldKey.currentState.showSnackBar(
           SnackBar(
             content: Text(response.message),
@@ -128,7 +127,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     _addTransactionBloc.subjectIsNewItem.sink.add(true);
   }
 
-  void _setSuggestionCustomer(String name){
+  void _setSuggestionCustomer(String name) {
     _controllerCustomerName.text = name;
   }
 
@@ -194,9 +193,12 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             FlatButton(
               child: Text('Submit'),
               onPressed: () {
+                String customerName = _controllerCustomerName.text.isNotEmpty
+                    ? _controllerCustomerName.text
+                    : '-';
                 Navigator.pop(context);
                 _addTransactionBloc.createTransaction(
-                    sum, _controllerCustomerName.text);
+                    sum, customerName);
               },
             ),
           ],
@@ -209,7 +211,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Pembeli: ${_controllerCustomerName.text}',
+                    'Pembeli: ${_controllerCustomerName.text.isNotEmpty ? _controllerCustomerName.text : '-'}',
                     style: Theme.of(context).textTheme.subtitle,
                   ),
                   Divider(

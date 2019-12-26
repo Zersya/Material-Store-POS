@@ -32,6 +32,8 @@ dependencies:
   flutter_money_formatter: ^0.8.3
   flutter_typeahead: ^1.7.0
   bezier_chart: any
+  firebase_auth: ^0.15.3
+  email_validator: ^1.0.3
 
 dev_dependencies:
   flutter_test:

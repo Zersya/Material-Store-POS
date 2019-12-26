@@ -79,9 +79,10 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
         await _transactionService.fetchCustomers();
 
     final listen = response.result.listen((list) {
-      customers = List<String>.from(list.documents.map((val) => val.data['name']).toList());
+      customers = List<String>.from(
+          list.documents.map((val) => val.data['name']).toList());
       // customers = list.documents.map((val) => val.data).toList();
-      
+
       this._subjectListCustomer.sink.add(customers);
       this.subjectResponse.sink.add(response);
       this.subjectState.sink.add(FormState.IDLE);
@@ -137,10 +138,12 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
         User('mail@mail.com'),
         DateTime.now().millisecondsSinceEpoch);
 
-    MyResponse response =
-        await _transactionService.createCustomer(customerName);
-    this.subjectResponse.sink.add(response);
-
+    MyResponse response;
+    if (customerName != '-') {
+      MyResponse response =
+          await _transactionService.createCustomer(customerName);
+      this.subjectResponse.sink.add(response);
+    }
     response = await _transactionService.createTransaction(transaction);
 
     this.subjectResponse.sink.add(response);
