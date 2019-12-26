@@ -1,17 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:harco_app/helper/locator.dart';
-import 'package:harco_app/screens/home/home_screen.dart';
-
+import 'package:harco_app/screens/splash/splash_screen.dart';
 import 'helper/routerHelper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  Firestore firestore = Firestore();
+  Firestore firestore = Firestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
   
   runApp(MyApp());
 
-  locator(firestore, false);
+  locator(firestore, auth, false);
 }
 
 class MyApp extends StatelessWidget {
@@ -55,6 +56,6 @@ class MyApp extends StatelessWidget {
         title: 'Harco POS',
         theme: themeData,
         onGenerateRoute: RouterHelper.generateRoute,
-        home: HomeScreen());
+        home: SplashScreen());
   }
 }

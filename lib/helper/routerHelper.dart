@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:harco_app/screens/addItem/addItem_screen.dart';
 import 'package:harco_app/screens/addtransaction/addTransaction_screen.dart';
+import 'package:harco_app/screens/auth/login/login_screen.dart';
 import 'package:harco_app/screens/home/home_screen.dart';
 import 'package:harco_app/screens/listItem/listItem_screen.dart';
 import 'package:harco_app/screens/transactionReport/transactionReport_screen.dart';
 
 class RouterHelper {
+  static const kRouteLogin = '/login';
   static const kRouteHome = '/home';
   static const kRouteListItem = '/home/item';
   static const kRouteAddItem = '/home/item/add';
@@ -15,6 +17,8 @@ class RouterHelper {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print(settings.name);
     switch (settings.name) {
+      case kRouteLogin:
+        return MaterialPageRoute(builder: (_) => LoginScreen());
       case kRouteHome:
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case kRouteListItem:
