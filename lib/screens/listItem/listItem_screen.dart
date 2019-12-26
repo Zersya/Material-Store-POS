@@ -16,12 +16,11 @@ class _ListItemScreenState extends State<ListItemScreen>
     with TickerProviderStateMixin {
   TextEditingController _controllerSearch = TextEditingController();
   ScrollController _scrollController = ScrollController();
-
   bool _isFabVisible = true;
-
   ScrollDirection _currentDir = ScrollDirection.forward;
-
   ListItemBloc _listItemBloc = ListItemBloc();
+
+  final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
  
   @override
@@ -34,6 +33,17 @@ class _ListItemScreenState extends State<ListItemScreen>
               ScrollDirection.reverse);
           _currentDir = _scrollController.position.userScrollDirection;
         });
+      }
+    });
+
+    _listItemBloc.responseStream.listen((response) {
+      if (response.message != null) {
+        _scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text(response.message),
+            backgroundColor: Theme.of(context).colorScheme.surface,
+          ),
+        );
       }
     });
     _listItemBloc.fetchItem();
@@ -88,14 +98,9 @@ class _ListItemScreenState extends State<ListItemScreen>
             child: Text('Hapus'),
             onPressed: () {
               Navigator.pop(context);
+              _listItemBloc.deleteItem(item);
             },
           ),
-          FlatButton(
-            child: Text('Ubah'),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
         ],
       ),
     );
@@ -110,6 +115,7 @@ class _ListItemScreenState extends State<ListItemScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -159,9 +165,9 @@ class _ListItemScreenState extends State<ListItemScreen>
                       shrinkWrap: true,
                       itemCount: items.length,
                       separatorBuilder: (context, index) {
-                        return Container(
-                          height: 1,
-                          color: Colors.black54,
+                        return Divider(
+                          height: 8,
+                          color: Theme.of(context).colorScheme.surface,
                         );
                       },
                       itemBuilder: (context, index) {

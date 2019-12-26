@@ -128,8 +128,8 @@ class CurTransaction extends StatelessWidget {
                       shrinkWrap: true,
                       itemCount: transactions.length,
                       separatorBuilder: (context, index) {
-                        return Container(
-                          height: 2,
+                        return Divider(
+                          height: 8,
                           color: Theme.of(context).colorScheme.surface,
                         );
                       },
