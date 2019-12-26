@@ -131,6 +131,42 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                   SizedBox(
                     height: 16.0,
                   ),
+                  Container(
+                    width: double.infinity,
+                    child: Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            'Total Profit',
+                            style: Theme.of(context).textTheme.title,
+                          ),
+                          Divider(
+                            height: 32.0,
+                            color: Colors.black,
+                          ),
+                          StreamBuilder<String>(
+                              stream: _reportBloc.subjectIncome,
+                              initialData: '0',
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(fmf
+                                      .copyWith(
+                                          amount: double.parse(snapshot.data))
+                                      .output
+                                      .symbolOnLeft, style: Theme.of(context).textTheme.title,);
+                                }
+                                return Container();
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
                   CurTransaction(
                     title: 'Transaksi',
                     scrollController: _scrollController,

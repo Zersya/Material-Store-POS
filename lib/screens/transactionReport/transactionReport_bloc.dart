@@ -11,16 +11,19 @@ class TransactionReportBloc extends TransBaseHelper {
   BehaviorSubject<String> subjectTimeSelect;
   BehaviorSubject<String> subjectTimeStart;
   BehaviorSubject<Map<String, dynamic>> subjectTimeMap;
+  BehaviorSubject<String> subjectIncome;
 
   TransactionReportBloc() {
     subjectTimeSelect = BehaviorSubject<String>();
     subjectTimeStart = BehaviorSubject<String>();
     subjectTimeMap = BehaviorSubject<Map<String, dynamic>>();
+    subjectIncome = BehaviorSubject<String>();
   }
 
   ValueStream<String> get timeSelectStream => subjectTimeSelect.stream;
   ValueStream<String> get timeStartStream => subjectTimeStart.stream;
   ValueStream<Map<String, dynamic>> get timeMapStream => subjectTimeMap.stream;
+  ValueStream<String> get incomeStream => subjectIncome.stream;
 
   void getDateTime() {
     DateTime dt = DateTime.now();
@@ -53,8 +56,13 @@ class TransactionReportBloc extends TransBaseHelper {
         .transactions
         .where((val) => val.createdAt >= customDt.millisecondsSinceEpoch)
         .toList();
+
+    int valIncome = 0;
+    transactions.forEach((val) => valIncome = valIncome + val.profit);
+
     this.subjectTransactions.sink.add(transactions);
     this.subjectTimeMap.sink.add({'start': customDt, 'end': dt});
+    this.subjectIncome.sink.add(valIncome.toString());
   }
 
   Future fetchTransactionAll() async {
@@ -66,6 +74,10 @@ class TransactionReportBloc extends TransBaseHelper {
       transactions = val.documents
           .map((val) => prefTrans.Transaction.fromMap(val.data))
           .toList();
+      int valIncome = 0;
+      transactions.forEach((val) => valIncome = valIncome + val.profit);
+
+      this.subjectIncome.sink.add(valIncome.toString());
       this.subjectTransactions.sink.add(transactions);
       this.subjectResponse.sink.add(response);
       this.subjectState.sink.add(ViewState.IDLE);
@@ -79,5 +91,6 @@ class TransactionReportBloc extends TransBaseHelper {
     subjectTimeSelect.close();
     subjectTimeStart.close();
     subjectTimeMap.close();
+    subjectIncome.close();
   }
 }
