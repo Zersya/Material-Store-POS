@@ -57,21 +57,33 @@ class _AddItemScreenState extends State<AddItemScreen> {
     _addItemBloc.fetchUnit();
   }
 
+  _buildShowSnackBar(BuildContext context, String msg) {
+    return _scaffoldKey.currentState.showSnackBar(SnackBar(
+      content: Text(msg),
+    ));
+  }
+
   void _submitBarang() async {
     String priceBuy = _controllerPriceBuy.numberValue.toInt().toString();
     String priceSell = _controllerPriceSell.numberValue.toInt().toString();
 
-    Item item = Item(
-      _controllerName.text.toLowerCase(),
-      priceBuy,
-      priceSell,
-      _addItemBloc.unitStream.value,
-      User('mail@mail.com'),
-      createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
-    );
+    if (_addItemBloc.unitStream.value == null) {
+      _buildShowSnackBar(context, 'Silahkan pilih satuan barang');
+    } else if (priceSell == '0' || priceBuy == '0') {
+      _buildShowSnackBar(context, 'Bilangan tidak boleh nol');
+    } else {
+      Item item = Item(
+        _controllerName.text.toLowerCase(),
+        priceBuy,
+        priceSell,
+        _addItemBloc.unitStream.value,
+        User('mail@mail.com'),
+        createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
+      );
 
-    await _addItemBloc.createItem(item);
-    _resetField();
+      await _addItemBloc.createItem(item);
+      _resetField();
+    }
   }
 
   void _resetField() {

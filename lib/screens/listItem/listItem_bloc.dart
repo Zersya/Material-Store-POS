@@ -20,6 +20,15 @@ class ListItemBloc extends BaseReponseBloc<ViewState> {
 
   ValueStream<List<Item>> get itemListStream => subjectListItem.stream;
 
+  Future deleteItem(Item item) async {
+    this.subjectState.sink.add(ViewState.LOADING);
+    items.removeWhere((val) => val.id == item.id);
+    this.subjectListItem.sink.add(items);
+    MyResponse response = await _itemService.deleteItem(item.id);
+    this.subjectResponse.sink.add(response);
+    this.subjectState.sink.add(ViewState.IDLE);
+  }
+
   Future fetchItem() async {
     this.subjectState.sink.add(ViewState.LOADING);
     MyResponse<Stream<QuerySnapshot>> response = await _itemService.fetchItem();
@@ -33,13 +42,12 @@ class ListItemBloc extends BaseReponseBloc<ViewState> {
     });
 
     listen.onDone(() => listen.cancel());
-
   }
 
   Future searchItem(String value) async {
     this.subjectState.sink.add(ViewState.LOADING);
     // MyResponse<Stream<QuerySnapshot>> response = await _itemService.searchItem(value);
-    
+
     List<Item> items = value.isEmpty
         ? this.items
         : this

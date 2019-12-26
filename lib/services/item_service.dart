@@ -18,7 +18,8 @@ class ItemService {
       await firestore
           .collection('items')
           .document(item.id)
-          .setData(item.toMap()).catchError((err) {
+          .setData(item.toMap())
+          .catchError((err) {
         throw Exception(err);
       });
 
@@ -27,9 +28,8 @@ class ItemService {
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
-    } on Exception catch(err) {
-      return MyResponse(ResponseState.ERROR, null,
-          message: err.toString());
+    } on Exception catch (err) {
+      return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
   }
 
@@ -50,9 +50,8 @@ class ItemService {
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
-    } on Exception catch (err){
-      return MyResponse(ResponseState.ERROR, null,
-          message: err.toString());
+    } on Exception catch (err) {
+      return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
   }
 
@@ -62,6 +61,20 @@ class ItemService {
           firestore.collection('items').snapshots();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);
+    } on SocketException {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Kesalahan jaringan');
+    } on Exception {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Terjadi kesalahan');
+    }
+  }
+
+  Future<MyResponse> deleteItem(String id) async {
+    try {
+      firestore.collection('items').document(id).delete();
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
+          message: 'Sukses menghapus barang');
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
