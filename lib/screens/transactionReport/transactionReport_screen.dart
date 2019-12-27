@@ -22,6 +22,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
   void initState() {
     super.initState();
     _reportBloc.fetchTransactionAll();
+    _reportBloc.fetchExpenseAll();
   }
 
   @override
@@ -49,6 +50,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                         children: <Widget>[
                           StreamBuilder<String>(
                             stream: _reportBloc.timeSelectStream,
+                            initialData: 'semua',
                             builder: (context, snapshot) {
                               return DropdownButton(
                                 value: snapshot.data,
@@ -60,23 +62,23 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                                 },
                                 items: [
                                   DropdownMenuItem(
-                                    value: '1 week',
+                                    value: '1 minggu',
                                     child: Text('Minggu ini'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '1 month',
+                                    value: '1 bulan',
                                     child: Text('1 Bulan Terakhir'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '3 month',
+                                    value: '3 bulan',
                                     child: Text('3 Bulan Terakhir'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '1 year',
+                                    value: '1 tahun',
                                     child: Text('1 Tahun Terakhir'),
                                   ),
                                   DropdownMenuItem(
-                                    value: 'all',
+                                    value: 'semua',
                                     child: Text('Seluruh Data'),
                                   ),
                                 ],
@@ -139,10 +141,14 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Total Profit',
-                            style: Theme.of(context).textTheme.title,
-                          ),
+                          StreamBuilder<String>(
+                              stream: _reportBloc.subjectTimeSelect,
+                              builder: (context, snapshot) {
+                                return Text(
+                                  'Total Profit ${_reportBloc.subjectTimeSelect.value}',
+                                  style: Theme.of(context).textTheme.title,
+                                );
+                              }),
                           Divider(
                             height: 32.0,
                             color: Colors.black,
@@ -152,11 +158,57 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                               initialData: '0',
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
-                                  return Text(fmf
-                                      .copyWith(
-                                          amount: double.parse(snapshot.data))
-                                      .output
-                                      .symbolOnLeft, style: Theme.of(context).textTheme.title,);
+                                  return Text(
+                                    fmf
+                                        .copyWith(
+                                            amount: double.parse(snapshot.data))
+                                        .output
+                                        .symbolOnLeft,
+                                    style: Theme.of(context).textTheme.title,
+                                  );
+                                }
+                                return Container();
+                              }),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 16.0,
+                  ),
+                  Container(
+                    width: double.infinity,
+                    child: Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          StreamBuilder<String>(
+                              stream: _reportBloc.subjectTimeSelect,
+                              builder: (context, snapshot) {
+                                return Text(
+                                  'Total Pengeluaran ${_reportBloc.subjectTimeSelect.value}',
+                                  style: Theme.of(context).textTheme.title,
+                                );
+                              }),
+                          Divider(
+                            height: 32.0,
+                            color: Colors.black,
+                          ),
+                          StreamBuilder<String>(
+                              stream: _reportBloc.subjectExpense,
+                              initialData: '0',
+                              builder: (context, snapshot) {
+                                if (snapshot.hasData) {
+                                  return Text(
+                                    fmf
+                                        .copyWith(
+                                            amount: double.parse(snapshot.data))
+                                        .output
+                                        .symbolOnLeft,
+                                    style: Theme.of(context).textTheme.title,
+                                  );
                                 }
                                 return Container();
                               }),

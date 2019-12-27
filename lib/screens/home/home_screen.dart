@@ -84,8 +84,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     FeatureItem(
+                      icon: FontAwesomeIcons.wallet,
+                      name: 'Pengeluaran',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouterHelper.kRouteExpense);
+                      },
+                    ),
+                    FeatureItem(
                       icon: FontAwesomeIcons.list,
-                      name: 'Laporan Transaksi',
+                      name: 'Laporan Keuangan',
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteTransactionReport);
