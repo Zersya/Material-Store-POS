@@ -284,7 +284,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           )
         ],
         bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(62.0),
+          preferredSize: const Size.fromHeight(100.0),
           child: Theme(
             data: Theme.of(context).copyWith(primaryColor: Colors.black),
             child: Padding(
