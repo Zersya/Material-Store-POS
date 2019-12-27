@@ -3,7 +3,6 @@ import 'package:get_it/get_it.dart';
 import 'package:harco_app/helper/responseHelper.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/unit.dart';
-import 'package:harco_app/models/user.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
 import 'package:harco_app/services/item_service.dart';
 import 'package:harco_app/services/transaction_service.dart';
@@ -113,7 +112,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
 
   Future createUnit(Unit unit) async {
     this.subjectState.sink.add(FormState.LOADING);
-    unit.user = User('mail@mail.com');
+    unit.user = this.subjectUser.value;
     MyResponse response = await _itemService.createUnit(unit);
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(FormState.IDLE);
@@ -135,7 +134,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
         cart,
         sumProfit,
         sumTotal,
-        User('mail@mail.com'),
+        this.subjectUser.value,
         DateTime.now().millisecondsSinceEpoch);
 
     MyResponse response;
