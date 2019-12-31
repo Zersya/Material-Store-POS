@@ -24,6 +24,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+     if (this.mounted) {
+      _homeBloc.dispose();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -97,6 +105,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteTransactionReport);
+                      },
+                    ),
+                    FeatureItem(
+                      icon: Icons.person,
+                      name: 'Pelanggan',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, RouterHelper.kRouteCustomer);
                       },
                     ),
                   ],

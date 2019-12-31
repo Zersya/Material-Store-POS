@@ -4,18 +4,18 @@ class Unit {
   String id;
   final String name;
   final String createdAt;
-  User user;
+  User createdBy;
 
-  Unit(this.name, this.createdAt, {this.id, this.user});
+  Unit(this.name, this.createdAt, {this.id, this.createdBy});
 
-  factory Unit.fromMap(Map<String, dynamic> map) =>
+  factory Unit.fromMap(Map<dynamic, dynamic> map) =>
       Unit(map['name'], map['createdAt'],
-          id: map['id'], user: User.fromMap(map['user']));
+          id: map['id'], createdBy: User.fromMap(map['createdBy']));
 
   Map<String, dynamic> toMap() => {
         'name': this.name,
         'createdAt': this.createdAt,
         'id': this.id,
-        'user': this.user.toMap()
+        'createdBy': this.createdBy.toMap()
       };
 }
