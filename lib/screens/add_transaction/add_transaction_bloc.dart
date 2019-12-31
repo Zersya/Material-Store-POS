@@ -42,7 +42,7 @@ class AddTransactionBloc extends CustomerBaseHelper {
   ValueStream<List<Item>> get itemListStream => _subjectListItem.stream;
   ValueStream<List<Item>> get cartStream => subjectCart.stream;
   ValueStream<bool> get isNewItemStream => subjectIsNewItem.stream;
- 
+
   void insert2Cart(Item item) {
     cart.insert(0, item);
     this.subjectCart.sink.add(cart);
@@ -71,8 +71,6 @@ class AddTransactionBloc extends CustomerBaseHelper {
     });
     listen.onDone(() => listen.cancel());
   }
-
-  
 
   Future fetchItem() async {
     this.subjectState.sink.add(ViewState.LOADING);
@@ -103,7 +101,8 @@ class AddTransactionBloc extends CustomerBaseHelper {
     this.subjectState.sink.add(ViewState.IDLE);
   }
 
-  Future createTransaction(int sumTotal, String customerName) async {
+  Future createTransaction(
+      int sumTotal, String customerName, Customer selectedCust) async {
     this.subjectState.sink.add(ViewState.LOADING);
 
     int sumProfit = 0;
@@ -114,28 +113,36 @@ class AddTransactionBloc extends CustomerBaseHelper {
       sumProfit = sumProfit + ((priceSell - priceBuy) * item.pcs);
     });
 
-    Customer customer = this.customers.firstWhere(
-        (val) => val.name.contains(customerName),
-        orElse: () => Customer(
-            name: customerName,
-            deposit: 0,
-            createdBy: this.subjectUser.value));
+    Customer customer = selectedCust ??
+        Customer(
+            name: customerName, deposit: 0, createdBy: this.subjectUser.value);
 
     prefTrans.Transaction transaction = prefTrans.Transaction(
         customer,
         cart,
         sumProfit,
         sumTotal,
+        customer.deposit,
         this.subjectUser.value,
         DateTime.now().millisecondsSinceEpoch);
 
-    MyResponse response;
+    if (customer.deposit > 0) {
+      customer.deposit -= sumTotal;
+      if (customer.deposit < 0) {
+        customer.deposit = 0;
+      }
+      await _transactionService.setCustomer(customer);
+    }
+
     if (subjectIsNewCustomer.value &&
         customerName.isNotEmpty &&
         !this.subjectListCustomer.value.contains(customerName)) {
       await _transactionService.setCustomer(customer);
     }
-    response = await _transactionService.createTransaction(transaction);
+
+    transaction.customer = customer;
+    MyResponse response =
+        await _transactionService.createTransaction(transaction);
 
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(ViewState.IDLE);
