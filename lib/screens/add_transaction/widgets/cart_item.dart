@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:harco_app/models/item.dart';
-import 'package:harco_app/screens/addtransaction/addTransaction_bloc.dart';
+import 'package:harco_app/screens/add_transaction/add_transaction_bloc.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({

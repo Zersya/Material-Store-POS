@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/models/item.dart';
-import 'package:harco_app/screens/listItem/listItem_bloc.dart';
+import 'package:harco_app/screens/list_item/list_item_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 
 class ListItemScreen extends StatefulWidget {

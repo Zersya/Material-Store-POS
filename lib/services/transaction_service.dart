@@ -61,7 +61,7 @@ class TransactionService {
       });
 
       return MyResponse(ResponseState.SUCCESS, transaction,
-          message: 'Berhasil menambah transaksi');
+          message: 'Berhasil menambah transaksi', code: 'SUCCESS_ADD_TRANS');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
@@ -78,7 +78,7 @@ class TransactionService {
           .collection('transactions')
           .where('createdAt',
               isGreaterThan:
-                  new DateTime(now.year, now.month, now.day - 1, 6, 30)
+                  new DateTime(now.year, now.month, now.day, 6, 30)
                       .millisecondsSinceEpoch)
           .snapshots();
 

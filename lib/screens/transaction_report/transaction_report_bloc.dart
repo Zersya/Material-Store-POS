@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:harco_app/helper/responseHelper.dart';
 import 'package:harco_app/helper/transBaseHelper.dart';
-import 'package:harco_app/models/expense.dart';
-import 'package:harco_app/services/expense_service.dart';
+import 'package:harco_app/models/cash.dart';
+import 'package:harco_app/services/cash_service.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
@@ -11,22 +11,26 @@ import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
 class TransactionReportBloc extends TransBaseHelper {
-  ExpenseService _expenseService = GetIt.I<ExpenseService>();
+  CashService _cashService = GetIt.I<CashService>();
 
   BehaviorSubject<String> subjectTimeSelect;
   BehaviorSubject<String> subjectTimeStart;
   BehaviorSubject<Map<String, dynamic>> subjectTimeMap;
   BehaviorSubject<String> subjectIncome;
-  BehaviorSubject<String> subjectExpense;
+  BehaviorSubject<String> subjectCashOut;
+  BehaviorSubject<String> subjectCashIn;
 
-  List<Expense> expenses = List();
+  List<Cash> cashs = List();
+  List<Cash> cashsOut = List();
+  List<Cash> cashsIn = List();
 
   TransactionReportBloc() {
     subjectTimeSelect = BehaviorSubject<String>();
     subjectTimeStart = BehaviorSubject<String>();
     subjectTimeMap = BehaviorSubject<Map<String, dynamic>>();
     subjectIncome = BehaviorSubject<String>();
-    subjectExpense = BehaviorSubject<String>();
+    subjectCashOut = BehaviorSubject<String>();
+    subjectCashIn = BehaviorSubject<String>();
 
     subjectTimeSelect.sink.add('semua');
   }
@@ -35,6 +39,33 @@ class TransactionReportBloc extends TransBaseHelper {
   ValueStream<String> get timeStartStream => subjectTimeStart.stream;
   ValueStream<Map<String, dynamic>> get timeMapStream => subjectTimeMap.stream;
   ValueStream<String> get incomeStream => subjectIncome.stream;
+
+  void insertCash(customDt) {
+    cashsOut = this
+        .cashs
+        .where((val) => customDt != null
+            ? val.createdAt >= customDt.millisecondsSinceEpoch
+            : true)
+        .where((val) => val.mode == CashEnum.OUT.toString())
+        .toList();
+    double valCashOut = cashsOut.fold(0,
+        (accumulator, currentElement) => accumulator + currentElement.amount);
+
+    this.subjectCashOut.sink.add(valCashOut.toString());
+
+    cashsIn = this
+        .cashs
+        .where((val) => customDt != null
+            ? val.createdAt >= customDt.millisecondsSinceEpoch
+            : true)
+        .where((val) => val.mode == CashEnum.IN.toString())
+        .toList();
+
+    double valCashIn = cashsIn.fold(0,
+        (accumulator, currentElement) => accumulator + currentElement.amount);
+
+    this.subjectCashIn.sink.add(valCashIn.toString());
+  }
 
   void getDateTime() {
     DateTime dt = DateTime.now();
@@ -69,35 +100,27 @@ class TransactionReportBloc extends TransBaseHelper {
     int valIncome = transactions.fold(0,
         (accumulator, currentElement) => accumulator + currentElement.profit);
 
-    List expenses = this
-        .expenses
-        .where((val) => val.createdAt >= customDt.millisecondsSinceEpoch)
-        .toList();
-
-    double valExpense = expenses.fold(0,
-        (accumulator, currentElement) => accumulator + currentElement.amount);
-
     subjectTimeStart.sink.add(
         '${customDt.day} ${numberToStrMonth(customDt.month)} ${customDt.year}');
     this.subjectTransactions.sink.add(transactions);
     this.subjectTimeMap.sink.add({'start': customDt, 'end': dt});
-    this.subjectExpense.sink.add(valExpense.toString());
     this.subjectIncome.sink.add(valIncome.toString());
+
+    insertCash(customDt);
   }
 
-  Future fetchExpenseAll() async {
+  Future fetchCashAll() async {
     this.subjectState.sink.add(ViewState.LOADING);
     MyResponse<Stream<QuerySnapshot>> response =
-        await _expenseService.fetchExpenseAll();
+        await _cashService.fetchCashAll();
 
     final listen = response.result.listen((val) {
-      expenses = val.documents.map((val) => Expense.fromMap(val.data)).toList();
-      double valExpense = expenses.fold(0,
-          (accumulator, currentElement) => accumulator + currentElement.amount);
+      cashs = val.documents.map((val) => Cash.fromMap(val.data)).toList();
 
-      this.subjectExpense.sink.add(valExpense.toString());
       this.subjectTransactions.sink.add(transactions);
       this.subjectResponse.sink.add(response);
+      insertCash(null);
+
       this.subjectState.sink.add(ViewState.IDLE);
     });
 
@@ -131,6 +154,7 @@ class TransactionReportBloc extends TransBaseHelper {
     subjectTimeStart.close();
     subjectTimeMap.close();
     subjectIncome.close();
-    subjectExpense.close();
+    subjectCashOut.close();
+    subjectCashIn.close();
   }
 }
