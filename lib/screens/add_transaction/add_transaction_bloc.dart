@@ -133,7 +133,7 @@ class AddTransactionBloc extends CustomerBaseHelper {
     if (subjectIsNewCustomer.value &&
         customerName.isNotEmpty &&
         !this.subjectListCustomer.value.contains(customerName)) {
-      await _transactionService.createCustomer(customer);
+      await _transactionService.setCustomer(customer);
     }
     response = await _transactionService.createTransaction(transaction);
 

@@ -271,7 +271,9 @@ class DropdownUnit extends StatelessWidget {
           )
         ],
       ),
-    );
+    ).then((_) {
+      controllerUnit.text = '';
+    });
   }
 
   @override
