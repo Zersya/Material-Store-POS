@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:harco_app/models/customer.dart';
 import 'package:harco_app/screens/customers/customer_bloc.dart';
@@ -20,6 +21,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
       precision: 0,
       decimalSeparator: '');
 
+  FocusNode _nodeName = FocusNode();
+  FocusNode _nodeDepo = FocusNode();
+
   final _formKey = GlobalKey<FormState>();
 
   Future dialogCustomer(BuildContext context, Customer customer) {
@@ -37,8 +41,12 @@ class _CustomerScreenState extends State<CustomerScreen> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  focusNode: _nodeName,
                   controller: _controllerName,
                   decoration: InputDecoration(labelText: 'Nama'),
+                  onFieldSubmitted: (val){
+                    FocusScope.of(context).requestFocus(_nodeDepo);
+                  },
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Nama tidak boleh kosong';
@@ -47,8 +55,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   },
                 ),
                 TextFormField(
+                  focusNode: _nodeDepo,
                   controller: _controllerDeposit,
+                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Deposit'),
+                  onFieldSubmitted: (val){
+                    FocusScope.of(context).unfocus();
+                  },
                   validator: (value) {
                     if (value.isEmpty) {
                       return 'Deposit tidak boleh kosong';
@@ -70,12 +84,16 @@ class _CustomerScreenState extends State<CustomerScreen> {
           FlatButton(
             child: Text('Simpan'),
             onPressed: () {
-              Customer newCustomer = customer != null
-                  ? customer
-                  : Customer(name: _controllerName.text);
-              newCustomer.deposit = _controllerDeposit.numberValue;
-              _customerBloc.setCustomer(newCustomer);
-              Navigator.pop(context);
+              if (_formKey.currentState.validate()) {
+                Customer newCustomer = customer != null
+                    ? customer
+                    : Customer(name: _controllerName.text);
+                    
+                newCustomer.name = _controllerName.text;
+                newCustomer.deposit = _controllerDeposit.numberValue;
+                _customerBloc.setCustomer(newCustomer);
+                Navigator.pop(context);
+              }
             },
           )
         ],
