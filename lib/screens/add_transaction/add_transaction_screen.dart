@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:harco_app/models/customer.dart';
 import 'package:harco_app/models/item.dart';
-import 'package:harco_app/models/user.dart';
 import 'package:harco_app/screens/add_transaction/add_transaction_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart' as prefixEnum;
@@ -54,6 +54,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   AddTransactionBloc _addTransactionBloc = AddTransactionBloc();
 
   Item _suggestion;
+  Customer _selectedCustomer;
 
   @override
   void initState() {
@@ -127,8 +128,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     _addTransactionBloc.subjectIsNewItem.sink.add(true);
   }
 
-  void _setSuggestionCustomer(String name) {
-    _controllerCustomerName.text = name;
+  void _setSuggestionCustomer(Customer customer) {
+    _selectedCustomer = customer;
+    _controllerCustomerName.text = customer.name;
     _addTransactionBloc.subjectIsNewCustomer.sink.add(false);
   }
 
@@ -197,7 +199,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 String customerName = _controllerCustomerName.text;
                 _controllerCustomerName.text = '';
                 Navigator.of(context).pop();
-                await _addTransactionBloc.createTransaction(sum, customerName);
+                await _addTransactionBloc.createTransaction(
+                    sum, customerName, _selectedCustomer);
               },
             ),
           ],
@@ -211,6 +214,14 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                 children: <Widget>[
                   Text(
                     'Pembeli: ${_controllerCustomerName.text.isNotEmpty ? _controllerCustomerName.text : '-'}',
+                    style: Theme.of(context).textTheme.subtitle,
+                  ),
+                  Divider(
+                    height: 4,
+                    color: Colors.transparent,
+                  ),
+                  Text(
+                    'Saldo: ${fmf.copyWith(amount: _selectedCustomer.deposit).output.nonSymbol}',
                     style: Theme.of(context).textTheme.subtitle,
                   ),
                   Divider(
@@ -241,14 +252,39 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                       );
                     },
                   ),
-                  Divider(height: 3, color: Colors.black87),
-                  ListTile(
-                    title: Text('Total'),
-                    subtitle: Text(fmf
-                        .copyWith(amount: sum.toDouble())
-                        .output
-                        .symbolOnLeft),
-                  )
+                  Divider(height: 16, color: Colors.black54),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Column(
+                        children: <Widget>[
+                          Text(
+                            fmf
+                                .copyWith(amount: sum.toDouble())
+                                .output
+                                .symbolOnLeft,
+                            style: Theme.of(context).textTheme.title,
+                          ),
+                        ],
+                      ),
+                      if (_selectedCustomer.deposit > 0)
+                        Column(
+                          children: <Widget>[
+                            Text('Sisa'),
+                            Divider(height: 8, color: Colors.transparent),
+                            Text(
+                              fmf
+                                  .copyWith(
+                                      amount: _selectedCustomer.deposit -
+                                          sum.toDouble())
+                                  .output
+                                  .symbolOnLeft,
+                              style: Theme.of(context).textTheme.caption,
+                            ),
+                          ],
+                        )
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -483,7 +519,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
     );
   }
 
-  TypeAheadField<String> fieldNameCustomer(BuildContext context) {
+  TypeAheadField<Customer> fieldNameCustomer(BuildContext context) {
     return TypeAheadField(
       hideOnEmpty: true,
       textFieldConfiguration: TextFieldConfiguration(
@@ -504,14 +540,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           }),
       suggestionsCallback: (pattern) {
         return _addTransactionBloc.customerListStream.value
-            .map((val) => val.name)
-            .where((val) => val.contains(pattern))
+            .map((val) => val)
+            .where((val) => val.name.contains(pattern))
             .toList();
       },
       itemBuilder: (context, suggestion) {
         return ListTile(
           leading: Icon(Icons.person),
-          title: Text(suggestion),
+          title: Text(suggestion.name),
+          subtitle: Text(
+              fmf.copyWith(amount: suggestion.deposit).output.symbolOnLeft),
         );
       },
       onSuggestionSelected: (suggestion) {
@@ -534,6 +572,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           onChanged: (val) {
             if (val.isEmpty) {
               _addTransactionBloc.subjectIsNewItem.sink.add(true);
+              _selectedCustomer = null;
             }
           },
           onSubmitted: (val) {
