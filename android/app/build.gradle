@@ -81,11 +81,12 @@ android {
             dimension "app"
             resValue "string", "app_name", "Dev HarcoApp"
             versionNameSuffix "-dev"
+            applicationId "com.inersya.harcoapp.dev"
         }
         prod {
             dimension "app"
             resValue "string", "app_name", "HarcoApp"
-            applicationId "com.inersya.harcoapp.prod"
+            applicationId "com.inersya.harcoapp"
         }
     }
 }
