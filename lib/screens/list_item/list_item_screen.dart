@@ -116,7 +116,7 @@ class _ListItemScreenState extends State<ListItemScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(),
+      appBar: AppBar(title: Text('Daftar barang'),),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: _isFabVisible
