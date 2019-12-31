@@ -25,15 +25,21 @@ class CustomerBaseService {
     }
   }
 
-  Future<MyResponse> createCustomer(Customer customer) async {
+  Future<MyResponse> setCustomer(Customer customer) async {
     try {
-      final id = firestore.collection('customers').document().documentID;
-      customer.id = id;
-      
+      String id;
+      if (customer.id == null) {
+        id = firestore.collection('customers').document().documentID;
+        customer.id = id;
+      } else {
+        id = customer.id;
+      }
+
       await firestore
           .collection('customers')
           .document(id)
-          .setData(customer.toMap()).catchError((err) {
+          .setData(customer.toMap())
+          .catchError((err) {
         throw Exception(err);
       });
 
@@ -49,11 +55,11 @@ class CustomerBaseService {
 
   Future<MyResponse> updateCustomer(Customer customer) async {
     try {
-
       await firestore
           .collection('customers')
           .document(customer.id)
-          .setData(customer.toMap()).catchError((err) {
+          .setData(customer.toMap())
+          .catchError((err) {
         throw Exception(err);
       });
 

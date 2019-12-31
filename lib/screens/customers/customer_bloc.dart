@@ -24,4 +24,12 @@ class CustomerBloc extends CustomerBaseHelper {
     });
     listen.onDone(() => listen.cancel());
   }
+
+  Future setCustomer(Customer customer) async {
+    this.subjectState.sink.add(ViewState.LOADING);
+    customer.createdBy = this.subjectUser.value;
+    MyResponse response = await _customerService.setCustomer(customer);
+    this.subjectResponse.sink.add(response);
+    this.subjectState.sink.add(ViewState.IDLE);
+  }
 }
