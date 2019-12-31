@@ -9,7 +9,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Firestore firestore = Firestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-  
+
   runApp(MyApp());
 
   locator(firestore, auth, false);
@@ -33,11 +33,13 @@ class MyApp extends StatelessWidget {
   );
 
   final TextTheme textTheme = TextTheme(
-      title: TextStyle(fontSize: 21, fontWeight: FontWeight.bold),
-      subtitle: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-      body1: TextStyle(fontSize: 18),
-      body2: TextStyle(fontSize: 18, color: Colors.grey[300]),
-      caption: TextStyle(fontSize: 16, color: Colors.black87),
+      headline: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      title: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+      subtitle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      body1: TextStyle(fontSize: 14),
+      body2: TextStyle(fontSize: 14, color: Colors.grey[300]),
+      caption: TextStyle(fontSize: 12, color: Colors.black87),
       overline: TextStyle(fontSize: 12, color: Colors.grey[500]));
 
   final ThemeData themeData = ThemeData(

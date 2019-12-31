@@ -1,10 +1,11 @@
 import 'package:bezier_chart/bezier_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/models/transaction.dart';
-import 'package:harco_app/screens/transactionReport/transactionReport_bloc.dart';
+import 'package:harco_app/screens/transaction_report/transaction_report_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart';
-import 'package:harco_app/widgets/curTransaction.dart';
+import 'package:harco_app/widgets/cur_transaction.dart';
 
 class TransactionReportScreen extends StatefulWidget {
   TransactionReportScreen({Key key}) : super(key: key);
@@ -22,7 +23,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
   void initState() {
     super.initState();
     _reportBloc.fetchTransactionAll();
-    _reportBloc.fetchExpenseAll();
+    _reportBloc.fetchCashAll();
   }
 
   @override
@@ -145,7 +146,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                               stream: _reportBloc.subjectTimeSelect,
                               builder: (context, snapshot) {
                                 return Text(
-                                  'Total Profit ${_reportBloc.subjectTimeSelect.value}',
+                                  'Profit ${_reportBloc.subjectTimeSelect.value}',
                                   style: Theme.of(context).textTheme.title,
                                 );
                               }),
@@ -176,46 +177,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                   SizedBox(
                     height: 16.0,
                   ),
-                  Container(
-                    width: double.infinity,
-                    child: Container(
-                      color: Colors.white,
-                      padding: EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          StreamBuilder<String>(
-                              stream: _reportBloc.subjectTimeSelect,
-                              builder: (context, snapshot) {
-                                return Text(
-                                  'Total Pengeluaran ${_reportBloc.subjectTimeSelect.value}',
-                                  style: Theme.of(context).textTheme.title,
-                                );
-                              }),
-                          Divider(
-                            height: 32.0,
-                            color: Colors.black,
-                          ),
-                          StreamBuilder<String>(
-                              stream: _reportBloc.subjectExpense,
-                              initialData: '0',
-                              builder: (context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return Text(
-                                    fmf
-                                        .copyWith(
-                                            amount: double.parse(snapshot.data))
-                                        .output
-                                        .symbolOnLeft,
-                                    style: Theme.of(context).textTheme.title,
-                                  );
-                                }
-                                return Container();
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
+                  kasWidget(),
                   SizedBox(
                     height: 16.0,
                   ),
@@ -243,6 +205,77 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                   }
                   return Container();
                 })
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container kasWidget() {
+    return Container(
+      width: double.infinity,
+      child: Container(
+        color: Colors.white,
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            StreamBuilder<String>(
+                stream: _reportBloc.subjectTimeSelect,
+                builder: (context, snapshot) {
+                  return Text(
+                    'Kas ${_reportBloc.subjectTimeSelect.value}',
+                    style: Theme.of(context).textTheme.title,
+                  );
+                }),
+            Divider(
+              height: 32.0,
+              color: Colors.black,
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed(RouterHelper.kRouteListCash,
+                    arguments: _reportBloc.cashsOut);
+              },
+              trailing: Icon(Icons.open_in_new),
+              title: Text('Kas Keluar'),
+              subtitle: StreamBuilder<String>(
+                  stream: _reportBloc.subjectCashOut,
+                  initialData: '0',
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(
+                        fmf
+                            .copyWith(amount: double.parse(snapshot.data))
+                            .output
+                            .symbolOnLeft,
+                      );
+                    }
+                    return Container();
+                  }),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.of(context).pushNamed(RouterHelper.kRouteListCash,
+                    arguments: _reportBloc.cashsIn);
+              },
+              trailing: Icon(Icons.open_in_new),
+              title: Text('Kas Masuk'),
+              subtitle: StreamBuilder<String>(
+                  stream: _reportBloc.subjectCashIn,
+                  initialData: '0',
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      return Text(
+                        fmf
+                            .copyWith(amount: double.parse(snapshot.data))
+                            .output
+                            .symbolOnLeft,
+                      );
+                    }
+                    return Container();
+                  }),
+            ),
           ],
         ),
       ),

@@ -141,7 +141,7 @@ class CurTransaction extends StatelessWidget {
                             '${dt.day} ${numberToStrMonth(dt.month)} ${dt.year}';
                         String dateTime = '${dt.hour}:${dt.minute}';
                         return ListTile(
-                          title: Text(transactions[index].name),
+                          title: Text(transactions[index].items.fold('', (current, value) => current + value.name + ', '),),
                           subtitle: Text(fmf
                               .copyWith(
                                   amount: transactions[index].total.toDouble())
@@ -151,7 +151,7 @@ class CurTransaction extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Text(date, style: Theme.of(context).textTheme.body1,),
+                              Text(date),
                               SizedBox(height: 8.0),
                               Text(dateTime, style: Theme.of(context).textTheme.body2.copyWith(color: Colors.black54),)
                             ],

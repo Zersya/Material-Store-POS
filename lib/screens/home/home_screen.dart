@@ -4,7 +4,7 @@ import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/screens/home/home_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart';
-import 'package:harco_app/widgets/curTransaction.dart';
+import 'package:harco_app/widgets/cur_transaction.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -85,10 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     FeatureItem(
                       icon: FontAwesomeIcons.wallet,
-                      name: 'Pengeluaran',
+                      name: 'Kas',
                       onTap: () {
                         Navigator.pushNamed(
-                            context, RouterHelper.kRouteExpense);
+                            context, RouterHelper.kRouteCash);
                       },
                     ),
                     FeatureItem(

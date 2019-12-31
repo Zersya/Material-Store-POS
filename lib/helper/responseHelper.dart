@@ -6,9 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MyResponse<T> {
   final ResponseState responseState;
   final String message;
+  final String code;
   final T result;
 
-  MyResponse(this.responseState, this.result, {this.message});
+  MyResponse(this.responseState, this.result, {this.message, this.code});
 }
 
 class BaseReponseBloc<T> {
