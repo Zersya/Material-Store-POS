@@ -89,7 +89,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         priceBuy,
         priceSell,
         _addTransactionBloc.unitStream.value,
-        User('mail@mail.com'),
+        _addTransactionBloc.subjectUser.value,
         createdAt: _suggestion.createdAt,
         pcs: int.parse(pcs),
         id: _suggestion.id,
@@ -100,7 +100,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
         priceBuy,
         priceSell,
         _addTransactionBloc.unitStream.value,
-        User('mail@mail.com'),
+        _addTransactionBloc.subjectUser.value,
         pcs: int.parse(pcs),
         createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
       );
@@ -262,7 +262,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   void dispose() {
     super.dispose();
     if (this.mounted) {
-      _addTransactionBloc.close();
+      _addTransactionBloc.dispose();
     }
   }
 
@@ -325,6 +325,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         color: Theme.of(context).colorScheme.primary,
                         child: Text(isNew ? 'Tambah baru' : 'Tambahkan'),
                         onPressed: () {
+                          FocusScope.of(context).unfocus();
                           if (_formKey.currentState.validate()) {
                             if (_controllerName.text.isEmpty) {
                               _buildShowSnackBar(
@@ -461,11 +462,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
               ),
             ),
           ),
-          StreamBuilder<prefixEnum.FormState>(
+          StreamBuilder<prefixEnum.ViewState>(
               stream: _addTransactionBloc.stateStream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data == prefixEnum.FormState.LOADING)
+                  if (snapshot.data == prefixEnum.ViewState.LOADING)
                     return Center(
                       child: Container(
                         width: double.infinity,
@@ -488,6 +489,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       textFieldConfiguration: TextFieldConfiguration(
           controller: _controllerCustomerName,
           focusNode: _nodeCustomerName,
+          textInputAction: TextInputAction.next,
           autofocus: false,
           decoration: InputDecoration(
             labelText: 'Nama Pembeli',
@@ -502,6 +504,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
           }),
       suggestionsCallback: (pattern) {
         return _addTransactionBloc.customerListStream.value
+            .map((val) => val.name)
             .where((val) => val.contains(pattern))
             .toList();
       },
@@ -522,6 +525,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
       hideOnEmpty: true,
       textFieldConfiguration: TextFieldConfiguration(
           controller: _controllerName,
+          textInputAction: TextInputAction.next,
           focusNode: _nodeName,
           autofocus: false,
           decoration: InputDecoration(

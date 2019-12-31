@@ -48,7 +48,7 @@ class AddItemBloc extends BaseReponseBloc<FormState> {
 
   Future createUnit(Unit unit) async {
     this.subjectState.sink.add(FormState.LOADING);
-    unit.user = User('mail@mail.com');
+    unit.createdBy = User('mail@mail.com');
     MyResponse response = await _itemService.createUnit(unit);
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(FormState.IDLE);
