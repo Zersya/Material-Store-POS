@@ -25,7 +25,7 @@ class CustomerBloc extends CustomerBaseHelper {
     listen.onDone(() => listen.cancel());
   }
 
-  Future createCustomer(Customer customer) async {
+  Future setCustomer(Customer customer) async {
     this.subjectState.sink.add(ViewState.LOADING);
     customer.createdBy = this.subjectUser.value;
     MyResponse response = await _customerService.setCustomer(customer);

@@ -72,10 +72,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
             onPressed: () {
               Customer newCustomer = customer != null
                   ? customer
-                  : Customer(
-                      name: _controllerName.text,
-                      deposit: _controllerDeposit.numberValue);
-              _customerBloc.createCustomer(newCustomer);
+                  : Customer(name: _controllerName.text);
+              newCustomer.deposit = _controllerDeposit.numberValue;
+              _customerBloc.setCustomer(newCustomer);
               Navigator.pop(context);
             },
           )
