@@ -42,7 +42,7 @@ class CurTransaction extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                      '${transaction.customer.name} | ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
+                      'Nama : ${transaction.customer.name}'),
                   ListView.separated(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -77,14 +77,17 @@ class CurTransaction extends StatelessWidget {
                         style: Theme.of(context).textTheme.subtitle,
                         children: [
                           TextSpan(
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.body1,
                             text:
                                 '${fmf.copyWith(amount: transaction.profit.toDouble()).output.symbolOnLeft}',
                           )
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  Text('Bayar deposit : ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
+
+                  Text('Bayar langsung : ${fmf.copyWith(amount: (transaction.deposit-transaction.total).abs()).output.symbolOnLeft}')
                 ],
               ),
             ),
