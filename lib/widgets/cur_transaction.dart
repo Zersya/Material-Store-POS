@@ -38,8 +38,11 @@ class CurTransaction extends StatelessWidget {
             child: SingleChildScrollView(
               physics: ScrollPhysics(),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  Text(
+                      'Nama : ${transaction.customer.name}'),
                   ListView.separated(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -74,14 +77,17 @@ class CurTransaction extends StatelessWidget {
                         style: Theme.of(context).textTheme.subtitle,
                         children: [
                           TextSpan(
-                            style: Theme.of(context).textTheme.caption,
+                            style: Theme.of(context).textTheme.body1,
                             text:
                                 '${fmf.copyWith(amount: transaction.profit.toDouble()).output.symbolOnLeft}',
                           )
                         ],
                       ),
                     ),
-                  )
+                  ),
+                  Text('Bayar deposit : ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
+
+                  Text('Bayar langsung : ${fmf.copyWith(amount: (transaction.deposit-transaction.total).abs()).output.symbolOnLeft}')
                 ],
               ),
             ),
@@ -141,7 +147,12 @@ class CurTransaction extends StatelessWidget {
                             '${dt.day} ${numberToStrMonth(dt.month)} ${dt.year}';
                         String dateTime = '${dt.hour}:${dt.minute}';
                         return ListTile(
-                          title: Text(transactions[index].items.fold('', (current, value) => current + value.name + ', '),),
+                          title: Text(
+                            transactions[index].items.fold(
+                                '',
+                                (current, value) =>
+                                    current + value.name + ', '),
+                          ),
                           subtitle: Text(fmf
                               .copyWith(
                                   amount: transactions[index].total.toDouble())
@@ -153,7 +164,13 @@ class CurTransaction extends StatelessWidget {
                             children: <Widget>[
                               Text(date),
                               SizedBox(height: 8.0),
-                              Text(dateTime, style: Theme.of(context).textTheme.body2.copyWith(color: Colors.black54),)
+                              Text(
+                                dateTime,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .body2
+                                    .copyWith(color: Colors.black54),
+                              )
                             ],
                           ),
                           onTap: () =>
