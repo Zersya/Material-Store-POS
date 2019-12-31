@@ -220,6 +220,8 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     height: 4,
                     color: Colors.transparent,
                   ),
+                      if (_selectedCustomer != null && _selectedCustomer.deposit > 0)
+
                   Text(
                     'Saldo: ${fmf.copyWith(amount: _selectedCustomer.deposit).output.nonSymbol}',
                     style: Theme.of(context).textTheme.subtitle,
@@ -267,7 +269,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           ),
                         ],
                       ),
-                      if (_selectedCustomer.deposit > 0)
+                      if (_selectedCustomer != null && _selectedCustomer.deposit > 0)
                         Column(
                           children: <Widget>[
                             Text('Sisa'),
