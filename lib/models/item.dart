@@ -4,23 +4,30 @@ class Item {
   String id;
   int pcs;
 
-  final User user;
+  User createdBy;
   final String name;
   final String priceBuy;
   final String priceSell;
   final String unit;
   final String createdAt;
 
-  Item(this.name, this.priceBuy, this.priceSell, this.unit,
-      this.user,
-      {this.id, this.pcs, this.createdAt,});
+  Item(
+    this.name,
+    this.priceBuy,
+    this.priceSell,
+    this.unit,
+    this.createdBy, {
+    this.id,
+    this.pcs,
+    this.createdAt,
+  });
 
   factory Item.fromMap(Map<String, dynamic> map) => Item(
       map['name'],
       map['priceBuy'],
       map['priceSell'],
       map['unit'],
-      User.fromMap(map['user']),
+      User.fromMap(map['createdBy']),
       id: map['id'],
       createdAt: map['createdAt']);
 
@@ -29,7 +36,7 @@ class Item {
       map['priceBuy'],
       map['priceSell'],
       map['unit'],
-      User.fromMap(map['user']),
+      User.fromMap(map['createdBy']),
       createdAt: map['createdAt'],
       id: map['id'],
       pcs: map['pcs']);
@@ -39,7 +46,7 @@ class Item {
         'priceBuy': this.priceBuy,
         'priceSell': this.priceSell,
         'unit': this.unit,
-        'user': this.user.toMap(),
+        'createdBy': this.createdBy.toMap(),
         'createdAt': this.createdAt,
         'id': this.id
       };
@@ -50,7 +57,7 @@ class Item {
         'priceSell': this.priceSell,
         'unit': this.unit,
         'createdAt': this.createdAt,
-        'user': this.user.toMap(),
+        'createdBy': this.createdBy.toMap(),
         'id': this.id,
         'pcs': this.pcs,
       };
