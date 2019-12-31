@@ -19,6 +19,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
   BehaviorSubject<List<String>> _subjectListCustomer;
   BehaviorSubject<List<Item>> subjectCart;
   BehaviorSubject<bool> subjectIsNewItem;
+  BehaviorSubject<bool> subjectIsNewCustomer;
 
   List<Item> items = List();
   List<Item> cart = List();
@@ -30,9 +31,11 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     _subjectListItem = BehaviorSubject<List<Item>>();
     subjectCart = BehaviorSubject<List<Item>>();
     subjectIsNewItem = BehaviorSubject<bool>();
+    subjectIsNewCustomer = BehaviorSubject<bool>();
     _subjectListCustomer = BehaviorSubject<List<String>>();
 
     subjectIsNewItem.sink.add(true);
+    subjectIsNewCustomer.sink.add(true);
   }
 
   ValueStream<String> get unitStream => subjectUnitValue.stream;
@@ -95,9 +98,9 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
 
     final listen = response.result.listen((val) {
       items = val.documents.map((val) => Item.fromMap(val.data)).toList();
+      
       this._subjectListItem.sink.add(items);
       this.subjectResponse.sink.add(response);
-
       this.subjectState.sink.add(FormState.IDLE);
     });
     listen.onDone(() => listen.cancel());
@@ -138,10 +141,10 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
         DateTime.now().millisecondsSinceEpoch);
 
     MyResponse response;
-    if (customerName != '-') {
-      MyResponse response =
-          await _transactionService.createCustomer(customerName);
-      this.subjectResponse.sink.add(response);
+    if (subjectIsNewCustomer.value && customerName.isNotEmpty && !_subjectListCustomer.value.contains(customerName)) {
+      await _transactionService.createCustomer(customerName);
+
+      // this.subjectResponse.sink.add(response);
     }
     response = await _transactionService.createTransaction(transaction);
 
@@ -150,7 +153,7 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     clearCart();
   }
 
-  void dispose() {
+  void close() {
     _subjectListUnit.close();
     _subjectListItem.close();
     _subjectListCustomer.close();
@@ -158,5 +161,6 @@ class AddTransactionBloc extends BaseReponseBloc<FormState> {
     subjectUnitValue.close();
     subjectCart.close();
     subjectIsNewItem.close();
+    subjectIsNewCustomer.close();
   }
 }

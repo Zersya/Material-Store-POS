@@ -4,12 +4,12 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/user.dart';
-import 'package:harco_app/screens/addtransaction/addTransaction_bloc.dart';
+import 'package:harco_app/screens/add_transaction/add_transaction_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart' as prefixEnum;
-import 'package:harco_app/widgets/dropDownUnit.dart';
+import 'package:harco_app/widgets/drop_down_unit.dart';
 
-import 'widgets/cartItem.dart';
+import 'widgets/cart_item.dart';
 
 class AddTransactionScreen extends StatefulWidget {
   AddTransactionScreen({Key key}) : super(key: key);
@@ -129,6 +129,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
 
   void _setSuggestionCustomer(String name) {
     _controllerCustomerName.text = name;
+    _addTransactionBloc.subjectIsNewCustomer.sink.add(false);
   }
 
   void _setSuggestionItem(Item suggestion) {
@@ -192,13 +193,11 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             ),
             FlatButton(
               child: Text('Submit'),
-              onPressed: () {
-                String customerName = _controllerCustomerName.text.isNotEmpty
-                    ? _controllerCustomerName.text
-                    : '-';
-                Navigator.pop(context);
-                _addTransactionBloc.createTransaction(
-                    sum, customerName);
+              onPressed: () async {
+                String customerName = _controllerCustomerName.text;
+                _controllerCustomerName.text = '';
+                Navigator.of(context).pop();
+                await _addTransactionBloc.createTransaction(sum, customerName);
               },
             ),
           ],
@@ -262,7 +261,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   @override
   void dispose() {
     super.dispose();
-    _addTransactionBloc.dispose();
+    if (this.mounted) {
+      _addTransactionBloc.close();
+    }
   }
 
   @override
@@ -492,9 +493,9 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
             labelText: 'Nama Pembeli',
           ),
           onChanged: (val) {
-            // if (val.isEmpty) {
-            //   _addTransactionBloc.subjectIsNewItem.sink.add(true);
-            // }
+            if (val.isEmpty) {
+              _addTransactionBloc.subjectIsNewCustomer.sink.add(true);
+            }
           },
           onSubmitted: (val) {
             FocusScope.of(context).requestFocus(_nodeName);

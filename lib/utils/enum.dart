@@ -9,3 +9,8 @@ enum ViewState {
 enum ResponseState {
   SUCCESS, ERROR
 }
+
+
+enum CashEnum {
+  IN, OUT
+}

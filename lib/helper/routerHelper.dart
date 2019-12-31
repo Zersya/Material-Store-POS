@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:harco_app/screens/addItem/addItem_screen.dart';
-import 'package:harco_app/screens/addtransaction/addTransaction_screen.dart';
+import 'package:harco_app/screens/add_item/add_item_screen.dart';
+import 'package:harco_app/screens/add_transaction/add_transaction_screen.dart';
 import 'package:harco_app/screens/auth/login/login_screen.dart';
-import 'package:harco_app/screens/expense/expense_screen.dart';
+import 'package:harco_app/screens/cash/cash_screen.dart';
 import 'package:harco_app/screens/home/home_screen.dart';
-import 'package:harco_app/screens/listItem/listItem_screen.dart';
-import 'package:harco_app/screens/transactionReport/transactionReport_screen.dart';
+import 'package:harco_app/screens/list_item/list_item_screen.dart';
+import 'package:harco_app/screens/transaction_report/transaction_report_screen.dart';
+import 'package:harco_app/screens/transaction_report/widgets/list_cash_screen.dart';
 
 class RouterHelper {
   static const kRouteLogin = '/login';
@@ -14,7 +15,8 @@ class RouterHelper {
   static const kRouteAddItem = '/home/item/add';
   static const kRouteAddTransaction = '/home/trasaction';
   static const kRouteTransactionReport = '/home/transactionReport';
-  static const kRouteExpense = '/home/expense';
+  static const kRouteCash = '/home/cash';
+  static const kRouteListCash = '/home/transactionReport/cash';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     print(settings.name);
@@ -31,8 +33,10 @@ class RouterHelper {
         return MaterialPageRoute(builder: (_) => AddTransactionScreen());
       case kRouteTransactionReport:
         return MaterialPageRoute(builder: (_) => TransactionReportScreen());
-      case kRouteExpense:
-        return MaterialPageRoute(builder: (_) => ExpenseScreen());
+      case kRouteCash:
+        return MaterialPageRoute(builder: (_) => CashScreen());
+      case kRouteListCash:
+        return MaterialPageRoute(builder: (_) => ListCashScreen(cashs: settings.arguments,));
       default:
         return MaterialPageRoute(builder: (_) => HomeScreen());
     }

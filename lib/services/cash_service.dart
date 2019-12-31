@@ -3,21 +3,21 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:harco_app/helper/responseHelper.dart';
 import 'package:harco_app/utils/enum.dart';
-import 'package:harco_app/models/expense.dart';
+import 'package:harco_app/models/cash.dart';
 
-class ExpenseService {
+class CashService {
   final Firestore firestore;
 
-  ExpenseService(this.firestore);
+  CashService(this.firestore);
   
-  Future<MyResponse> createExpense(
-      Expense transaction) async {
+  Future<MyResponse> createCash(
+      Cash transaction) async {
     try {
       transaction.id =
-          firestore.collection('expenses').document().documentID;
+          firestore.collection('cashes').document().documentID;
 
       await firestore
-          .collection('expenses')
+          .collection('cashes')
           .document(transaction.id)
           .setData(transaction.toMap())
           .catchError((err) {
@@ -25,7 +25,7 @@ class ExpenseService {
       });
 
       return MyResponse(ResponseState.SUCCESS, transaction,
-          message: 'Berhasil menambah pengeluaran');
+          message: 'Berhasil menambah kas');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
@@ -34,15 +34,15 @@ class ExpenseService {
     }
   }
 
-  Future<MyResponse> fetchExpenseToday() async {
+  Future<MyResponse> fetchCashToday() async {
     try {
       DateTime now = DateTime.now();
 
       Stream<QuerySnapshot> snapshot = firestore
-          .collection('expenses')
+          .collection('cashes')
           .where('createdAt',
               isGreaterThan:
-                  new DateTime(now.year, now.month, now.day - 1, 6, 30)
+                  new DateTime(now.year, now.month, now.day, 6, 30)
                       .millisecondsSinceEpoch)
           .snapshots();
 
@@ -57,10 +57,11 @@ class ExpenseService {
     }
   }
 
-  Future<MyResponse> fetchExpenseAll() async {
+  Future<MyResponse> fetchCashAll() async {
     try {
       Stream<QuerySnapshot> snapshot =
-          firestore.collection('expenses').snapshots();
+          firestore.collection('cashes')
+          .snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);
