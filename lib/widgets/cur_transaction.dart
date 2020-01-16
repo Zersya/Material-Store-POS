@@ -41,8 +41,7 @@ class CurTransaction extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(
-                      'Nama : ${transaction.customer.name}'),
+                  Text('Nama : ${transaction.customer.name}'),
                   ListView.separated(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -85,9 +84,10 @@ class CurTransaction extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Text('Bayar deposit : ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
-
-                  Text('Bayar langsung : ${fmf.copyWith(amount: (transaction.deposit-transaction.total).abs()).output.symbolOnLeft}')
+                  Text(
+                      'Bayar deposit : ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
+                  Text(
+                      'Bayar langsung : ${fmf.copyWith(amount: (transaction.deposit - transaction.total).abs()).output.symbolOnLeft}')
                 ],
               ),
             ),
@@ -105,30 +105,45 @@ class CurTransaction extends StatelessWidget {
       padding: EdgeInsets.all(16.0),
       alignment: Alignment.center,
       child: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              title,
-              style: Theme.of(context).textTheme.title,
-            ),
-            Divider(
-              height: 32,
-              color: Colors.black,
-            ),
-            StreamBuilder<List<prefTrans.Transaction>>(
-                stream: bloc.transStream,
-                initialData: List(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    List<prefTrans.Transaction> transactions = snapshot.data;
+        child: StreamBuilder<List<prefTrans.Transaction>>(
+            stream: bloc.transStream,
+            initialData: List(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                List<prefTrans.Transaction> transactions = snapshot.data;
 
-                    if (transactions.isEmpty) {
-                      return Center(
-                        child: Text('Tidak ada transaksi'),
-                      );
-                    }
-                    return ListView.separated(
+                if (transactions.isEmpty) {
+                  return Center(
+                    child: Text('Tidak ada transaksi'),
+                  );
+                }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Wrap(
+                      alignment: WrapAlignment.spaceBetween,
+                      direction: Axis.vertical,
+                      crossAxisAlignment: WrapCrossAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '$title : ${snapshot.data.length}',
+                          style: Theme.of(context).textTheme.title,
+                        ),
+                        Divider(
+                          height: 16.0,
+                          color: Colors.transparent,
+                        ),
+                        Text(
+                          'Omzet : ${fmf.copyWith(amount: bloc.omzet).output.symbolOnLeft}',
+                          style: Theme.of(context).textTheme.title,
+                        ),
+                      ],
+                    ),
+                    Divider(
+                      height: 32,
+                      color: Colors.black,
+                    ),
+                    ListView.separated(
                       controller: scrollController,
                       physics: ScrollPhysics(),
                       shrinkWrap: true,
@@ -177,13 +192,13 @@ class CurTransaction extends StatelessWidget {
                               dialogSummary(context, transactions[index]),
                         );
                       },
-                    );
-                  } else {
-                    return CircularProgressIndicator();
-                  }
-                }),
-          ],
-        ),
+                    ),
+                  ],
+                );
+              } else {
+                return CircularProgressIndicator();
+              }
+            }),
       ),
     );
   }
