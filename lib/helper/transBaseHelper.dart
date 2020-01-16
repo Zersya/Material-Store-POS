@@ -23,6 +23,8 @@ class TransBaseHelper extends BaseReponseBloc<ViewState> {
 
   ValueStream<int> get profitTodayStream => subjectProfitToday.stream;
 
+  double get omzet => transactions.fold(0, (a, b) => a + b.total);
+
   void dispose() {
     subjectTransactions.close();
     subjectProfitToday.close();

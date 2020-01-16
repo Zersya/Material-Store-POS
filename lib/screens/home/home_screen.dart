@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-     if (this.mounted) {
+    if (this.mounted) {
       _homeBloc.dispose();
     }
   }
@@ -45,11 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: double.infinity,
                     height: 120,
                     color: Theme.of(context).colorScheme.primaryVariant,
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
                     child: StreamBuilder<ViewState>(
                         stream: _homeBloc.stateStream,
                         initialData: ViewState.LOADING,
@@ -72,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 alignment: Alignment.center,
                 child: Wrap(
                   crossAxisAlignment: WrapCrossAlignment.center,
+                  alignment: WrapAlignment.center,
                   direction: Axis.horizontal,
                   spacing: 16.0,
                   children: <Widget>[
@@ -95,8 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: FontAwesomeIcons.wallet,
                       name: 'Kas',
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, RouterHelper.kRouteCash);
+                        Navigator.pushNamed(context, RouterHelper.kRouteCash);
                       },
                     ),
                     FeatureItem(
@@ -121,12 +116,15 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16.0,
               ),
+              
               StreamBuilder<ViewState>(
                 stream: _homeBloc.stateStream,
                 initialData: ViewState.LOADING,
                 builder: (context, snapshot) {
                   if (!snapshot.hasData || snapshot.data == ViewState.LOADING) {
-                    return Center(child: CircularProgressIndicator());
+                    return Container(
+                        height: 80,
+                        child: Center(child: CircularProgressIndicator()));
                   }
                   return CurTransaction(
                     title: 'Transaksi Hari ini',
@@ -151,10 +149,11 @@ class CardTop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: EdgeInsets.symmetric(vertical: 16.0, horizontal: 32),
+      margin: EdgeInsets.symmetric(vertical: 32.0, horizontal: 32),
       elevation: 2,
       child: Container(
         padding: EdgeInsets.all(16.0),
+        alignment: Alignment.center,
         child: Wrap(
           direction: Axis.horizontal,
           alignment: WrapAlignment.center,
@@ -162,7 +161,7 @@ class CardTop extends StatelessWidget {
           spacing: 100.0,
           children: <Widget>[
             Text(
-              'Pendapatan ${numberToStrDay(DateTime.now().weekday)}',
+              'Profit ${numberToStrDay(DateTime.now().weekday)}',
               style: Theme.of(context).textTheme.subtitle,
             ),
             StreamBuilder<int>(
