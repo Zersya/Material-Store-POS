@@ -117,13 +117,24 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                               if (snapshot.hasData &&
                                   snapshot.data.length > 0) {
                                 List<Map<String, dynamic>> list = List();
+                                DateTime curDay;
+                                double sumDay = 0;
                                 _reportBloc.transStream.value.forEach((val) {
-                                  Map<String, dynamic> map = {
-                                    'value': val.profit,
-                                    'date': DateTime.fromMillisecondsSinceEpoch(
-                                        val.createdAt)
-                                  };
-                                  list.add(map);
+                                  final DateTime dt =
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                    val.createdAt,
+                                  );
+
+                                  if (curDay != null && curDay.day != dt.day) {
+                                    Map<String, dynamic> map = {
+                                      'value': sumDay,
+                                      'date': curDay
+                                    };
+                                    list.add(map);
+                                    sumDay = 0;
+                                  }
+                                  curDay = dt;
+                                  sumDay += val.profit;
                                 });
                                 return lineChart(context, start, list);
                               }

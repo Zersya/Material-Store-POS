@@ -97,7 +97,7 @@ class TransactionReportBloc extends TransBaseHelper {
         .where((val) => val.createdAt >= customDt.millisecondsSinceEpoch)
         .toList();
 
-    int valIncome = transactions.fold(0,
+    double valIncome = transactions.fold(0.0,
         (accumulator, currentElement) => accumulator + currentElement.profit);
 
     subjectTimeStart.sink.add(

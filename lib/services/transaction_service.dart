@@ -43,7 +43,7 @@ class TransactionService extends CustomerBaseService{
           .collection('transactions')
           .where('createdAt',
               isGreaterThan:
-                  new DateTime(now.year, now.month, now.day, 6, 30)
+                  new DateTime(now.year, now.month, now.day, 00, 00)
                       .millisecondsSinceEpoch)
           .snapshots();
 
