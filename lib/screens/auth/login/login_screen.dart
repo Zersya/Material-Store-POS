@@ -189,9 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: RaisedButton(
                                         elevation: 2,
                                         child: Text('Masuk',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .button),
+                                            style: Theme.of(context).textTheme.button),
                                         onPressed: () {
                                           _submitLogin();
                                         },

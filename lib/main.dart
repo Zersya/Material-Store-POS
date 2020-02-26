@@ -32,19 +32,22 @@ class MyApp extends StatelessWidget {
     brightness: Brightness.light,
   );
 
-  final TextTheme textTheme = TextTheme(
-      headline: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-      title: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-      subtitle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-      body1: TextStyle(fontSize: 14),
-      body2: TextStyle(fontSize: 14, color: Colors.grey[300]),
-      caption: TextStyle(fontSize: 12, color: Colors.black87),
-      overline: TextStyle(fontSize: 12, color: Colors.grey[500]));
+  static final TextTheme textTheme = TextTheme(
+    headline: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+    subhead: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+    title: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+    subtitle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+    body1: TextStyle(fontSize: 14),
+    body2: TextStyle(fontSize: 14, color: Colors.grey[300]),
+    caption: TextStyle(fontSize: 12, color: Colors.black87),
+    overline: TextStyle(fontSize: 12, color: Colors.grey[500]),
+    button: TextStyle(color: Colors.white),
+  );
 
   final ThemeData themeData = ThemeData(
       colorScheme: colorSchemeLight,
       primaryColor: colorSchemeLight.primary,
+      textTheme: textTheme,
       accentColor: colorSchemeLight.secondary,
       backgroundColor: colorSchemeLight.background,
       buttonTheme: ButtonThemeData(colorScheme: colorSchemeLight),

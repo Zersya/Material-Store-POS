@@ -309,7 +309,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         title: Text('Transaksi'),
         actions: <Widget>[
           FlatButton(
-            child: Text('Periksa'),
+            child: Text('Periksa', style: Theme.of(context).textTheme.button),
             onPressed: () {
               if (_addTransactionBloc.cart.isEmpty) {
                 _buildShowSnackBar(context, 'Silahkan tambahkan barang');
@@ -319,16 +319,6 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
             },
           )
         ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(100.0),
-          child: Theme(
-            data: Theme.of(context).copyWith(primaryColor: Colors.black),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: fieldNameCustomer(context),
-            ),
-          ),
-        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Row(
@@ -336,7 +326,10 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
             Expanded(
               child: FlatButton(
                 color: Theme.of(context).colorScheme.primary,
-                child: Text('Batalkan'),
+                child: Text(
+                  'Batalkan',
+                  style: Theme.of(context).textTheme.button,
+                ),
                 onPressed: () {
                   if (_addTransactionBloc.cartStream.value == null) {
                     return;
@@ -358,7 +351,8 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       bool isNew = snapshot.data;
                       return FlatButton(
                         color: Theme.of(context).colorScheme.primary,
-                        child: Text(isNew ? 'Tambah baru' : 'Tambahkan'),
+                        child: Text(isNew ? 'Tambah baru' : 'Tambahkan',
+                            style: Theme.of(context).textTheme.button),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           if (_formKey.currentState.validate()) {
@@ -398,6 +392,10 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      fieldNameCustomer(context),
+                      SizedBox(
+                        height: 16.0,
+                      ),
                       fieldItemName(context),
                       SizedBox(
                         height: 16.0,
