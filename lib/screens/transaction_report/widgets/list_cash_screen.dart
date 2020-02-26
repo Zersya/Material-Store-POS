@@ -9,6 +9,7 @@ class ListCashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Daftar Kas'),),
       body: SafeArea(
         child: ListView.separated(
           itemCount: cashs.length,
