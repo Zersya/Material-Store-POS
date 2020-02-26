@@ -94,17 +94,15 @@ class DropdownUnit extends StatelessWidget {
         SizedBox(
           width: 16.0,
         ),
-        Expanded(
-          child: Material(
-            shape: Border.all(color: Theme.of(context).colorScheme.surface),
-            elevation: 2,
-            child: InkWell(
-              child: Container(
-                  padding: EdgeInsets.all(4.0), child: Icon(Icons.add)),
-              onTap: () {
-                dialogCreateUnit(context);
-              },
-            ),
+        Material(
+          shape: Border.all(color: Theme.of(context).colorScheme.primaryVariant),
+          elevation: 2,
+          child: InkWell(
+            child: Container(
+                padding: EdgeInsets.all(8.0), child: Icon(Icons.add)),
+            onTap: () {
+              dialogCreateUnit(context);
+            },
           ),
         )
       ],

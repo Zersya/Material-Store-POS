@@ -128,7 +128,7 @@ class _CashScreenState extends State<CashScreen> {
                   contentPadding: EdgeInsets.only(left: 16, right: 16.0),
                   leading: Card(
                     elevation: 4,
-                                      child: Container(
+                    child: Container(
                       height: 60,
                       width: 60,
                       color: category == 'Keluar'
@@ -137,7 +137,10 @@ class _CashScreenState extends State<CashScreen> {
                       child: Center(
                         child: Text(
                           category,
-                          style: Theme.of(context).textTheme.subtitle.copyWith(color:Colors.white),
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle
+                              .copyWith(color: Colors.white),
                         ),
                       ),
                     ),

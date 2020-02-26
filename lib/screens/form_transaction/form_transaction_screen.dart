@@ -396,7 +396,33 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       SizedBox(
                         height: 16.0,
                       ),
-                      fieldItemName(context),
+                      Row(
+                        children: <Widget>[
+                          Expanded(child: fieldItemName(context)),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          Material(
+                            shape: Border.all(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .primaryVariant),
+                            elevation: 2,
+                            child: InkWell(
+                              child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Icon(Icons.clear)),
+                              onTap: () {
+                                _controllerName.clear();
+                                _controllerPriceBuy.text = '0';
+                                _controllerPriceSell.text = '0';
+                                _controllerPieces.text = '0';
+                                FocusScope.of(context).unfocus();
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       SizedBox(
                         height: 16.0,
                       ),
