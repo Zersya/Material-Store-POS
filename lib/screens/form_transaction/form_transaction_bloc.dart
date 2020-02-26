@@ -11,7 +11,7 @@ import 'package:harco_app/services/transaction_service.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:rxdart/rxdart.dart';
 
-class AddTransactionBloc extends CustomerBaseHelper {
+class FormTransactionBloc extends CustomerBaseHelper {
   ItemService _itemService = GetIt.I<ItemService>();
   TransactionService _transactionService = GetIt.I<TransactionService>();
 
@@ -25,7 +25,7 @@ class AddTransactionBloc extends CustomerBaseHelper {
   List<Item> items = List();
   List<Item> cart = List();
 
-  AddTransactionBloc() {
+  FormTransactionBloc() {
     subjectUnitValue = BehaviorSubject<String>();
     _subjectListUnit = BehaviorSubject<List<Unit>>();
     _subjectListItem = BehaviorSubject<List<Item>>();

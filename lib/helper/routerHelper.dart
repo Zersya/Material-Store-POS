@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:harco_app/screens/add_item/add_item_screen.dart';
-import 'package:harco_app/screens/add_transaction/add_transaction_screen.dart';
+import 'package:harco_app/screens/form_item/form_item_screen.dart';
+import 'package:harco_app/screens/form_transaction/form_transaction_screen.dart';
 import 'package:harco_app/screens/auth/login/login_screen.dart';
 import 'package:harco_app/screens/cash/cash_screen.dart';
 import 'package:harco_app/screens/customers/customer_screen.dart';
@@ -14,8 +14,8 @@ class RouterHelper {
   static const kRouteHome = '/home';
   static const kRouteCustomer = '/home/customer';
   static const kRouteListItem = '/home/item';
-  static const kRouteAddItem = '/home/item/add';
-  static const kRouteAddTransaction = '/home/trasaction';
+  static const kRouteFormItem = '/home/item/form';
+  static const kRouteFormTransaction = '/home/trasaction';
   static const kRouteTransactionReport = '/home/transactionReport';
   static const kRouteCash = '/home/cash';
   static const kRouteListCash = '/home/transactionReport/cash';
@@ -31,10 +31,10 @@ class RouterHelper {
         return MaterialPageRoute(builder: (_) => CustomerScreen());
       case kRouteListItem:
         return MaterialPageRoute(builder: (_) => ListItemScreen());
-      case kRouteAddItem:
-        return MaterialPageRoute(builder: (_) => AddItemScreen());
-      case kRouteAddTransaction:
-        return MaterialPageRoute(builder: (_) => AddTransactionScreen());
+      case kRouteFormItem:
+        return MaterialPageRoute(builder: (_) => FormItemScreen());
+      case kRouteFormTransaction:
+        return MaterialPageRoute(builder: (_) => FormTransactionScreen());
       case kRouteTransactionReport:
         return MaterialPageRoute(builder: (_) => TransactionReportScreen());
       case kRouteCash:

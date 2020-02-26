@@ -4,21 +4,21 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:harco_app/models/customer.dart';
 import 'package:harco_app/models/item.dart';
-import 'package:harco_app/screens/add_transaction/add_transaction_bloc.dart';
+import 'package:harco_app/screens/form_transaction/form_transaction_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart' as prefixEnum;
 import 'package:harco_app/widgets/drop_down_unit.dart';
 
 import 'widgets/cart_item.dart';
 
-class AddTransactionScreen extends StatefulWidget {
-  AddTransactionScreen({Key key}) : super(key: key);
+class FormTransactionScreen extends StatefulWidget {
+  FormTransactionScreen({Key key}) : super(key: key);
 
   @override
   _AddTransactionScreenState createState() => _AddTransactionScreenState();
 }
 
-class _AddTransactionScreenState extends State<AddTransactionScreen> {
+class _AddTransactionScreenState extends State<FormTransactionScreen> {
   TextEditingController _controllerCustomerName = TextEditingController();
   TextEditingController _controllerName = TextEditingController();
 
@@ -51,7 +51,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  AddTransactionBloc _addTransactionBloc = AddTransactionBloc();
+  FormTransactionBloc _addTransactionBloc = FormTransactionBloc();
 
   Item _suggestion;
   Customer _selectedCustomer;

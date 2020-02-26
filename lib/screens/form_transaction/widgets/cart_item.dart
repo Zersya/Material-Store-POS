@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:harco_app/models/item.dart';
-import 'package:harco_app/screens/add_transaction/add_transaction_bloc.dart';
+import 'package:harco_app/screens/form_transaction/form_transaction_bloc.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({
     Key key,
-    @required AddTransactionBloc addTransactionBloc,
+    @required FormTransactionBloc addTransactionBloc,
   })  : _addTransactionBloc = addTransactionBloc,
         super(key: key);
 
-  final AddTransactionBloc _addTransactionBloc;
+  final FormTransactionBloc _addTransactionBloc;
 
   @override
   Widget build(BuildContext context) {

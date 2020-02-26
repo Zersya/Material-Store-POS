@@ -73,4 +73,18 @@ class TransactionService extends CustomerBaseService{
           message: 'Terjadi kesalahan');
     }
   }
+
+  Future<MyResponse> deleteTransaction(String id) async {
+    try {
+      firestore.collection('transactions').document(id).delete();
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
+          message: 'Sukses menghapus barang');
+    } on SocketException {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Kesalahan jaringan');
+    } on Exception {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Terjadi kesalahan');
+    }
+  }
 }

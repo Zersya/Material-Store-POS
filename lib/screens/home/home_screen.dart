@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       name: 'Transaksi',
                       onTap: () {
                         Navigator.pushNamed(
-                            context, RouterHelper.kRouteAddTransaction);
+                            context, RouterHelper.kRouteFormTransaction);
                       },
                     ),
                     FeatureItem(
@@ -116,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16.0,
               ),
-              
               StreamBuilder<ViewState>(
                 stream: _homeBloc.stateStream,
                 initialData: ViewState.LOADING,
@@ -130,6 +129,42 @@ class _HomeScreenState extends State<HomeScreen> {
                     title: 'Transaksi Hari ini',
                     scrollController: scrollController,
                     bloc: _homeBloc,
+                    onUpdate: () {},
+                    onDelete: (transaction) {
+                      showDialog(
+                        context: context,
+                        builder: (_) {
+                          return AlertDialog(
+                            title: Text('Konfirmasi Hapus'),
+                            actions: <Widget>[
+                              FlatButton(
+                                textColor: Colors.grey,
+                                child: Text(
+                                  'Ya',
+                                ),
+                                onPressed: () {
+                                  _homeBloc
+                                      .deleteTransaction(transaction)
+                                      .then((_) {
+                                    Navigator.of(context).pop(true);
+                                  });
+                                },
+                              ),
+                              FlatButton(
+                                child: Text('Tidak'),
+                                onPressed: () {
+                                  Navigator.of(context).pop(false);
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      ).then((val) {
+                        if (val != null && val) {
+                          Navigator.of(context).pop();
+                        }
+                      });
+                    },
                   );
                 },
               )

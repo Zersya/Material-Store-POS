@@ -3,17 +3,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:harco_app/models/item.dart';
 import 'package:harco_app/models/unit.dart';
-import 'package:harco_app/screens/add_item/add_item_bloc.dart';
+import 'package:harco_app/screens/form_item/form_item_bloc.dart';
 import 'package:harco_app/utils/enum.dart' as prefixEnum;
 
-class AddItemScreen extends StatefulWidget {
-  AddItemScreen({Key key}) : super(key: key);
+class FormItemScreen extends StatefulWidget {
+  FormItemScreen({Key key}) : super(key: key);
 
   @override
   _AddItemScreenState createState() => _AddItemScreenState();
 }
 
-class _AddItemScreenState extends State<AddItemScreen> {
+class _AddItemScreenState extends State<FormItemScreen> {
   TextEditingController _controllerName = TextEditingController();
 
   MoneyMaskedTextController _controllerPriceBuy = MoneyMaskedTextController(

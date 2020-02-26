@@ -29,6 +29,9 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Laporan Transaksi'),
+      ),
       body: SafeArea(
         child: Stack(
           children: <Widget>[
@@ -327,65 +330,65 @@ class InformationTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<String>(
-        stream: _reportBloc.timeStartStream,
-        initialData: '',
-        builder: (context, snapshot) {
-          if (snapshot.data.isEmpty) return Container();
+      stream: _reportBloc.timeStartStream,
+      initialData: '',
+      builder: (context, snapshot) {
+        if (snapshot.data.isEmpty) return Container();
 
-          DateTime dt = DateTime.now();
-          String custTime =
-              '${dt.day} ${numberToStrMonth(dt.month)} ${dt.year}';
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Tanggal Mulai',
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle
-                        .copyWith(color: Colors.grey[500]),
-                  ),
-                  Divider(
-                    height: 16,
-                    color: Colors.transparent,
-                  ),
-                  Text(
-                    snapshot.data,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle
-                        .copyWith(color: Colors.grey[500]),
-                  ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Tanggal Selesai',
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle
-                        .copyWith(color: Colors.grey[500]),
-                  ),
-                  Divider(
-                    height: 16,
-                    color: Colors.transparent,
-                  ),
-                  Text(
-                    custTime,
-                    style: Theme.of(context)
-                        .textTheme
-                        .subtitle
-                        .copyWith(color: Colors.grey[500]),
-                  ),
-                ],
-              ),
-            ],
-          );
-        });
+        DateTime dt = DateTime.now();
+        String custTime = '${dt.day} ${numberToStrMonth(dt.month)} ${dt.year}';
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Tanggal Mulai',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle
+                      .copyWith(color: Colors.grey[500]),
+                ),
+                Divider(
+                  height: 16,
+                  color: Colors.transparent,
+                ),
+                Text(
+                  snapshot.data,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle
+                      .copyWith(color: Colors.grey[500]),
+                ),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Tanggal Selesai',
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle
+                      .copyWith(color: Colors.grey[500]),
+                ),
+                Divider(
+                  height: 16,
+                  color: Colors.transparent,
+                ),
+                Text(
+                  custTime,
+                  style: Theme.of(context)
+                      .textTheme
+                      .subtitle
+                      .copyWith(color: Colors.grey[500]),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
   }
 }

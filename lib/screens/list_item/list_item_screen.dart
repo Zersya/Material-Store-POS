@@ -123,7 +123,7 @@ class _ListItemScreenState extends State<ListItemScreen>
           ? FloatingActionButton(
               child: Icon(Icons.add),
               onPressed: () {
-                Navigator.pushNamed(context, RouterHelper.kRouteAddItem);
+                Navigator.pushNamed(context, RouterHelper.kRouteFormItem);
               },
             )
           : null,

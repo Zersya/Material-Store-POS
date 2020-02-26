@@ -9,12 +9,15 @@ class CurTransaction extends StatelessWidget {
       {Key key,
       @required this.scrollController,
       @required this.bloc,
-      @required this.title})
+      @required this.title, @required this.onDelete, @required this.onUpdate,
+      })
       : super(key: key);
 
   final ScrollController scrollController;
   final String title;
   final TransBaseHelper bloc;
+  final Function onDelete;
+  final Function onUpdate;
 
   Future dialogSummary(
       BuildContext context, prefTrans.Transaction transaction) {
@@ -26,6 +29,16 @@ class CurTransaction extends StatelessWidget {
         return AlertDialog(
           title: Text('Ringkasan'),
           actions: <Widget>[
+            FlatButton(
+              child: Text('Hapus'),
+              onPressed: () => onDelete(transaction),
+            ),
+            FlatButton(
+              child: Text('Ubah'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
             FlatButton(
               child: Text('Kembali'),
               onPressed: () {
@@ -65,7 +78,10 @@ class CurTransaction extends StatelessWidget {
                   ),
                   Divider(height: 3, color: Colors.black87),
                   ListTile(
-                    title: Text('Total'),
+                    title: Text(
+                      'Total',
+                      style: Theme.of(context).textTheme.subtitle,
+                    ),
                     subtitle: Text(fmf
                         .copyWith(amount: transaction.total.toDouble())
                         .output

@@ -17,12 +17,12 @@ void main() {
 
 class MyApp extends StatelessWidget {
   static final ColorScheme colorSchemeLight = ColorScheme.light(
-    primary: const Color(0xffe6c76a),
-    primaryVariant: const Color(0xfff3c751),
-    secondary: const Color(0xffbfce87),
-    secondaryVariant: const Color(0xffbfe06c),
+    primary: const Color(0xff3d8ab8),
+    primaryVariant: const Color(0xff849fbb),
+    secondary: const Color(0xff005f97),
+    secondaryVariant: const Color(0xff004c79),
     surface: Colors.black45,
-    background: Colors.white,
+    background: Color(0xffe9f4fa),
     error: const Color(0xffb00020),
     onPrimary: Colors.white,
     onSecondary: Colors.grey[500],
