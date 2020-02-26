@@ -103,35 +103,35 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                       decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.primary),
                       child: StreamBuilder<Map<String, dynamic>>(
-                          stream: _reportBloc.subjectTimeMap,
-                          initialData: {
-                            'start': DateTime(2019),
-                            'end': DateTime.now()
-                          },
-                          builder: (context, snapshot) {
-                            DateTime start = snapshot.data['start'];
+                        stream: _reportBloc.subjectTimeMap,
+                        initialData: {
+                          'start': DateTime(2019),
+                          'end': DateTime.now()
+                        },
+                        builder: (context, snapshot) {
+                          DateTime start = snapshot.data['start'];
 
-                            return StreamBuilder<List<Transaction>>(
-                                stream: _reportBloc.transStream,
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasData &&
-                                      snapshot.data.length > 0) {
-                                    List<Map<String, dynamic>> list = List();
-                                    _reportBloc.transStream.value
-                                        .forEach((val) {
-                                      Map<String, dynamic> map = {
-                                        'value': val.profit.toDouble(),
-                                        'date':
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                val.createdAt)
-                                      };
-                                      list.add(map);
-                                    });
-                                    return lineChart(context, start, list);
-                                  }
-                                  return Container();
+                          return StreamBuilder<List<Transaction>>(
+                            stream: _reportBloc.transStream,
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot.data.length > 0) {
+                                List<Map<String, dynamic>> list = List();
+                                _reportBloc.transStream.value.forEach((val) {
+                                  Map<String, dynamic> map = {
+                                    'value': val.profit,
+                                    'date': DateTime.fromMillisecondsSinceEpoch(
+                                        val.createdAt)
+                                  };
+                                  list.add(map);
                                 });
-                          }),
+                                return lineChart(context, start, list);
+                              }
+                              return Container();
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -148,9 +148,24 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                           StreamBuilder<String>(
                               stream: _reportBloc.subjectTimeSelect,
                               builder: (context, snapshot) {
-                                return Text(
-                                  'Profit ${_reportBloc.subjectTimeSelect.value}',
-                                  style: Theme.of(context).textTheme.title,
+                                return Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    Text(
+                                      'Profit ${_reportBloc.subjectTimeSelect.value}',
+                                      style: Theme.of(context).textTheme.title,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).pushNamed(
+                                            RouterHelper.kRouteListTransaction,
+                                            arguments: RouteListTransaction(
+                                                _scrollController, _reportBloc),
+                                          );
+                                        },
+                                        child: Icon(Icons.open_in_new))
+                                  ],
                                 );
                               }),
                           Divider(
@@ -181,73 +196,29 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                     height: 16.0,
                   ),
                   kasWidget(),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  CurTransaction(
-                    title: 'Transaksi',
-                    scrollController: _scrollController,
-                    bloc: _reportBloc,
-                    onUpdate: () {},
-                    onDelete: (transaction) {
-                      showDialogConfrmDelete(context, transaction).then((val) {
-                        if (val != null && val) {
-                          Navigator.of(context).pop();
-                        }
-                      });
-                    },
-                  )
                 ],
               ),
             ),
             StreamBuilder<ViewState>(
-                stream: _reportBloc.stateStream,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    if (snapshot.data == ViewState.LOADING)
-                      return Center(
-                        child: Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          color: Colors.black54,
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                      );
-                  }
-                  return Container();
-                })
+              stream: _reportBloc.stateStream,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data == ViewState.LOADING)
+                    return Center(
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        color: Colors.black54,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                    );
+                }
+                return Container();
+              },
+            )
           ],
         ),
       ),
-    );
-  }
-
-  Future showDialogConfrmDelete(BuildContext context, transaction) {
-    return showDialog(
-      context: context,
-      builder: (_) {
-        return AlertDialog(
-          title: Text('Konfirmasi Hapus'),
-          actions: <Widget>[
-            FlatButton(
-              child: Text(
-                'Ya',
-              ),
-              onPressed: () {
-                _reportBloc.deleteTransaction(transaction).then((_) {
-                  Navigator.of(context).pop(true);
-                });
-              },
-            ),
-            FlatButton(
-              child: Text('Tidak'),
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
