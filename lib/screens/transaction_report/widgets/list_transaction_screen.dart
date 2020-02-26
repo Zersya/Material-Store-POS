@@ -3,12 +3,13 @@ import 'package:harco_app/helper/routerHelper.dart';
 import 'package:harco_app/widgets/cur_transaction.dart';
 
 class ListTransactionScreen extends StatelessWidget {
-  const ListTransactionScreen({Key key, @required this.params})
-      : super(key: key);
+  ListTransactionScreen({Key key, @required this.params}) : super(key: key);
   final RouteListTransaction params;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text('Daftar Kas'),
       ),
@@ -20,11 +21,8 @@ class ListTransactionScreen extends StatelessWidget {
           bloc: params.reportBloc,
           onUpdate: () {},
           onDelete: (transaction) {
-            showDialogConfrmDelete(context, transaction).then((val) {
-              if (val != null && val) {
-                Navigator.of(context).pop();
-              }
-            });
+            Navigator.of(context).pop();
+            showDialogConfrmDelete(context, transaction);
           },
         ),
       ),

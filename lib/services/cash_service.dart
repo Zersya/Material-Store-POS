@@ -9,22 +9,21 @@ class CashService {
   final Firestore firestore;
 
   CashService(this.firestore);
-  
-  Future<MyResponse> createCash(
-      Cash transaction) async {
-    try {
-      transaction.id =
-          firestore.collection('cashes').document().documentID;
 
+  Future<MyResponse> setCash(Cash cash) async {
+    try {
+      if (cash.id == null) {
+        cash.id = firestore.collection('cashes').document().documentID;
+      }
       await firestore
           .collection('cashes')
-          .document(transaction.id)
-          .setData(transaction.toMap())
+          .document(cash.id)
+          .setData(cash.toMap())
           .catchError((err) {
         throw Exception(err);
       });
 
-      return MyResponse(ResponseState.SUCCESS, transaction,
+      return MyResponse(ResponseState.SUCCESS, cash,
           message: 'Berhasil menambah kas');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
@@ -41,9 +40,8 @@ class CashService {
       Stream<QuerySnapshot> snapshot = firestore
           .collection('cashes')
           .where('createdAt',
-              isGreaterThan:
-                  new DateTime(now.year, now.month, now.day, 6, 30)
-                      .millisecondsSinceEpoch)
+              isGreaterThan: new DateTime(now.year, now.month, now.day, 6, 30)
+                  .millisecondsSinceEpoch)
           .snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
@@ -60,11 +58,24 @@ class CashService {
   Future<MyResponse> fetchCashAll() async {
     try {
       Stream<QuerySnapshot> snapshot =
-          firestore.collection('cashes')
-          .snapshots();
+          firestore.collection('cashes').snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);
+    } on SocketException {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Kesalahan jaringan');
+    } on Exception {
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
+          message: 'Terjadi kesalahan');
+    }
+  }
+
+  Future<MyResponse> deleteCash(String id) async {
+    try {
+      firestore.collection('cashes').document(id).delete();
+      return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
+          message: 'Sukses menghapus kas');
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');
