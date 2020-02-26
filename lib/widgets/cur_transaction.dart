@@ -33,12 +33,12 @@ class CurTransaction extends StatelessWidget {
               child: Text('Hapus'),
               onPressed: () => onDelete(transaction),
             ),
-            FlatButton(
-              child: Text('Ubah'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
+            // FlatButton(
+            //   child: Text('Ubah'),
+            //   onPressed: () {
+            //     Navigator.pop(context);
+            //   },
+            // ),
             FlatButton(
               child: Text('Kembali'),
               onPressed: () {
