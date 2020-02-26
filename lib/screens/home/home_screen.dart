@@ -131,35 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     bloc: _homeBloc,
                     onUpdate: () {},
                     onDelete: (transaction) {
-                      showDialog(
-                        context: context,
-                        builder: (_) {
-                          return AlertDialog(
-                            title: Text('Konfirmasi Hapus'),
-                            actions: <Widget>[
-                              FlatButton(
-                                textColor: Colors.grey,
-                                child: Text(
-                                  'Ya',
-                                ),
-                                onPressed: () {
-                                  _homeBloc
-                                      .deleteTransaction(transaction)
-                                      .then((_) {
-                                    Navigator.of(context).pop(true);
-                                  });
-                                },
-                              ),
-                              FlatButton(
-                                child: Text('Tidak'),
-                                onPressed: () {
-                                  Navigator.of(context).pop(false);
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      ).then((val) {
+                      showDialogConfrmDelete(context, transaction).then((val) {
                         if (val != null && val) {
                           Navigator.of(context).pop();
                         }
@@ -172,6 +144,35 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Future showDialogConfrmDelete(BuildContext context, transaction) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ya',
+              ),
+              onPressed: () {
+                _homeBloc.deleteTransaction(transaction).then((_) {
+                  Navigator.of(context).pop(true);
+                });
+              },
+            ),
+            FlatButton(
+              child: Text('Tidak'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -199,7 +200,7 @@ class CardTop extends StatelessWidget {
               'Profit ${numberToStrDay(DateTime.now().weekday)}',
               style: Theme.of(context).textTheme.subtitle,
             ),
-            StreamBuilder<int>(
+            StreamBuilder<double>(
               stream: homeBloc.profitTodayStream,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {

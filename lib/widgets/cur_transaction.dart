@@ -186,7 +186,7 @@ class CurTransaction extends StatelessWidget {
                           ),
                           subtitle: Text(fmf
                               .copyWith(
-                                  amount: transactions[index].total.toDouble())
+                                  amount: transactions[index].total)
                               .output
                               .symbolOnLeft),
                           trailing: Column(

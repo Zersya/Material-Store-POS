@@ -2,7 +2,7 @@ import 'package:harco_app/models/user.dart';
 
 class Item {
   String id;
-  int pcs;
+  double pcs;
 
   User createdBy;
   final String name;
@@ -39,7 +39,7 @@ class Item {
       User.fromMap(map['createdBy']),
       createdAt: map['createdAt'],
       id: map['id'],
-      pcs: map['pcs']);
+      pcs: map['pcs'].toDouble());
 
   Map<String, dynamic> toMap() => {
         'name': this.name,

@@ -188,6 +188,14 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                     title: 'Transaksi',
                     scrollController: _scrollController,
                     bloc: _reportBloc,
+                    onUpdate: () {},
+                    onDelete: (transaction) {
+                      showDialogConfrmDelete(context, transaction).then((val) {
+                        if (val != null && val) {
+                          Navigator.of(context).pop();
+                        }
+                      });
+                    },
                   )
                 ],
               ),
@@ -211,6 +219,35 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Future showDialogConfrmDelete(BuildContext context, transaction) {
+    return showDialog(
+      context: context,
+      builder: (_) {
+        return AlertDialog(
+          title: Text('Konfirmasi Hapus'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                'Ya',
+              ),
+              onPressed: () {
+                _reportBloc.deleteTransaction(transaction).then((_) {
+                  Navigator.of(context).pop(true);
+                });
+              },
+            ),
+            FlatButton(
+              child: Text('Tidak'),
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

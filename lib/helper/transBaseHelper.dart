@@ -9,19 +9,19 @@ class TransBaseHelper extends BaseReponseBloc<ViewState> {
   TransactionService transactionService = GetIt.I<TransactionService>();
 
   BehaviorSubject<List<prefTrans.Transaction>> subjectTransactions;
-  BehaviorSubject<int> subjectProfitToday;
+  BehaviorSubject<double> subjectProfitToday;
 
   List<prefTrans.Transaction> transactions = List();
 
   TransBaseHelper() {
     subjectTransactions = BehaviorSubject<List<prefTrans.Transaction>>();
-    subjectProfitToday = BehaviorSubject<int>();
+    subjectProfitToday = BehaviorSubject<double>();
   }
 
   ValueStream<List<prefTrans.Transaction>> get transStream =>
       subjectTransactions.stream;
 
-  ValueStream<int> get profitTodayStream => subjectProfitToday.stream;
+  ValueStream<double> get profitTodayStream => subjectProfitToday.stream;
 
   double get omzet => transactions.fold(0, (a, b) => a + b.total);
 

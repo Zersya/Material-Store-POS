@@ -136,7 +136,7 @@ class TransactionReportBloc extends TransBaseHelper {
       transactions = val.documents
           .map((val) => prefTrans.Transaction.fromMap(val.data))
           .toList();
-      int valIncome = 0;
+      double valIncome = 0;
       transactions.forEach((val) => valIncome = valIncome + val.profit);
 
       this.subjectIncome.sink.add(valIncome.toString());
@@ -146,6 +146,16 @@ class TransactionReportBloc extends TransBaseHelper {
     });
 
     listen.onDone(() => listen.cancel());
+  }
+
+
+  Future deleteTransaction(prefTrans.Transaction transaction) async {
+    this.subjectState.sink.add(ViewState.LOADING);
+    transactions.removeWhere((val) => val.id == transaction.id);
+    this.subjectTransactions.sink.add(transactions);
+    MyResponse response = await transactionService.deleteTransaction(transaction.id);
+    this.subjectResponse.sink.add(response);
+    this.subjectState.sink.add(ViewState.IDLE);
   }
 
   void dispose() {

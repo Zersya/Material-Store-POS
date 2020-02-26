@@ -7,8 +7,8 @@ class Transaction {
   Customer customer;
   double deposit;
   final List<Item> items;
-  final int profit;
-  final int total;
+  final double profit;
+  final double total;
   final User cashier;
   final int createdAt;
 
@@ -23,9 +23,9 @@ class Transaction {
       list
           .map((val) => Item.fromMapTransaction(Map<String, dynamic>.from(val)))
           .toList(),
-      map['profit'],
-      map['total'],
-      map['deposit'],
+      map['profit'].toDouble(),
+      map['total'].toDouble(),
+      map['deposit'].toDouble(),
       User.fromMap(map['cashier']),
       map['createdAt'],
       id: map['id'],

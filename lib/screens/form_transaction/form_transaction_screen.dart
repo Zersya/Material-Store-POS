@@ -32,12 +32,8 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
       initialValue: 0,
       precision: 0,
       decimalSeparator: '');
-  MoneyMaskedTextController _controllerPieces = MoneyMaskedTextController(
-      thousandSeparator: '.',
-      initialValue: 0,
-      precision: 0,
-      decimalSeparator: '');
 
+  TextEditingController _controllerPieces = TextEditingController();
   TextEditingController _controllerUnit = TextEditingController();
 
   FocusNode _nodeCustomerName = FocusNode();
@@ -80,7 +76,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
 
     String priceBuy = _controllerPriceBuy.numberValue.toInt().toString();
     String priceSell = _controllerPriceSell.numberValue.toInt().toString();
-    String pcs = _controllerPieces.numberValue.toInt().toString();
+    String pcs = _controllerPieces.text;
 
     Item newItem;
 
@@ -92,7 +88,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         _addTransactionBloc.unitStream.value,
         _addTransactionBloc.subjectUser.value,
         createdAt: _suggestion.createdAt,
-        pcs: int.parse(pcs),
+        pcs: double.tryParse(pcs),
         id: _suggestion.id,
       );
     } else {
@@ -102,14 +98,14 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         priceSell,
         _addTransactionBloc.unitStream.value,
         _addTransactionBloc.subjectUser.value,
-        pcs: int.parse(pcs),
+        pcs: double.tryParse(pcs),
         createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
       );
 
       _addTransactionBloc.createItem(newItem);
     }
 
-    newItem.pcs = int.parse(pcs);
+    newItem.pcs = double.tryParse(pcs);
     _addTransactionBloc.insert2Cart(newItem);
     _resetField();
   }
@@ -180,7 +176,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
       context: context,
       builder: (context) {
         List<Item> cart = _addTransactionBloc.cart;
-        int sum = 0;
+        double sum = 0;
         cart.forEach(
             (item) => sum = sum + (int.parse(item.priceSell) * item.pcs));
 
@@ -220,12 +216,12 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                     height: 4,
                     color: Colors.transparent,
                   ),
-                      if (_selectedCustomer != null && _selectedCustomer.deposit > 0)
-
-                  Text(
-                    'Saldo: ${fmf.copyWith(amount: _selectedCustomer.deposit).output.nonSymbol}',
-                    style: Theme.of(context).textTheme.subtitle,
-                  ),
+                  if (_selectedCustomer != null &&
+                      _selectedCustomer.deposit > 0)
+                    Text(
+                      'Saldo: ${fmf.copyWith(amount: _selectedCustomer.deposit).output.nonSymbol}',
+                      style: Theme.of(context).textTheme.subtitle,
+                    ),
                   Divider(
                     height: 16,
                     color: Colors.black87,
@@ -269,7 +265,8 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                           ),
                         ],
                       ),
-                      if (_selectedCustomer != null && _selectedCustomer.deposit > 0)
+                      if (_selectedCustomer != null &&
+                          _selectedCustomer.deposit > 0)
                         Column(
                           children: <Widget>[
                             Text('Sisa'),
@@ -465,9 +462,10 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         controller: _controllerPieces,
                         focusNode: _nodePieces,
                         textInputAction: TextInputAction.done,
-                        keyboardType: TextInputType.number,
+                        keyboardType:
+                            TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          WhitelistingTextInputFormatter(RegExp("[0-9,.]")),
                         ],
                         decoration: InputDecoration(
                           labelText: 'Jumlah satuan',

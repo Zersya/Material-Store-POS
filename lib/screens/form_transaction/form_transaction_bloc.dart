@@ -102,10 +102,10 @@ class FormTransactionBloc extends CustomerBaseHelper {
   }
 
   Future createTransaction(
-      int sumTotal, String customerName, Customer selectedCust) async {
+      double sumTotal, String customerName, Customer selectedCust) async {
     this.subjectState.sink.add(ViewState.LOADING);
 
-    int sumProfit = 0;
+    double sumProfit = 0;
     cart.forEach((item) {
       int priceSell = int.parse(item.priceSell);
       int priceBuy = int.parse(item.priceBuy);

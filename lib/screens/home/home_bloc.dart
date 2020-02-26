@@ -6,7 +6,7 @@ import 'package:harco_app/utils/enum.dart';
 
 class HomeBloc extends TransBaseHelper {
   Future fetchProfitToday() async {
-    int sumProfitToday = 0;
+    double sumProfitToday = 0;
     transactions.forEach((val) {
       sumProfitToday = sumProfitToday + val.profit;
       print(val.profit);
