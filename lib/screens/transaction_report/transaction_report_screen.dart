@@ -5,7 +5,6 @@ import 'package:harco_app/models/transaction.dart';
 import 'package:harco_app/screens/transaction_report/transaction_report_bloc.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart';
-import 'package:harco_app/widgets/cur_transaction.dart';
 
 class TransactionReportScreen extends StatefulWidget {
   TransactionReportScreen({Key key}) : super(key: key);
