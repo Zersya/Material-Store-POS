@@ -28,7 +28,7 @@ packages:
       name: bezier_chart
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.14"
+    version: "1.0.16"
   boolean_selector:
     dependency: transitive
     description:
@@ -174,13 +174,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.8.0"
-  flutter_money_formatter:
-    dependency: "direct main"
-    description:
-      name: flutter_money_formatter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.8.3"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -234,12 +227,12 @@ packages:
     source: hosted
     version: "2.1.4"
   intl:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.15.8"
+    version: "0.16.1"
   js:
     dependency: transitive
     description:

@@ -22,7 +22,6 @@ class _ListItemScreenState extends State<ListItemScreen>
 
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
 
- 
   @override
   void initState() {
     super.initState();
@@ -67,10 +66,8 @@ class _ListItemScreenState extends State<ListItemScreen>
             ),
             ListTile(
               title: Text('Harga beli'),
-              subtitle: Text(fmf
-                  .copyWith(amount: double.parse(item.priceBuy))
-                  .output
-                  .symbolOnLeft),
+              subtitle:
+                  Text(currencyFormatter.format(double.parse(item.priceBuy))),
             ),
             Divider(
               height: 4,
@@ -78,10 +75,8 @@ class _ListItemScreenState extends State<ListItemScreen>
             ),
             ListTile(
               title: Text('Harga jual'),
-              subtitle: Text(fmf
-                  .copyWith(amount: double.parse(item.priceSell))
-                  .output
-                  .symbolOnLeft),
+              subtitle:
+                  Text(currencyFormatter.format(double.parse(item.priceSell))),
             ),
             Divider(
               height: 4,
@@ -116,7 +111,9 @@ class _ListItemScreenState extends State<ListItemScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(title: Text('Daftar barang'),),
+      appBar: AppBar(
+        title: Text('Daftar barang'),
+      ),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: _isFabVisible

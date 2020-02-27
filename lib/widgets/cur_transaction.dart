@@ -5,13 +5,14 @@ import 'package:harco_app/models/transaction.dart' as prefTrans;
 import 'package:harco_app/utils/commonFunc.dart';
 
 class CurTransaction extends StatelessWidget {
-  const CurTransaction(
-      {Key key,
-      @required this.scrollController,
-      @required this.bloc,
-      @required this.title, @required this.onDelete, @required this.onUpdate,
-      })
-      : super(key: key);
+  const CurTransaction({
+    Key key,
+    @required this.scrollController,
+    @required this.bloc,
+    @required this.title,
+    @required this.onDelete,
+    @required this.onUpdate,
+  }) : super(key: key);
 
   final ScrollController scrollController;
   final String title;
@@ -65,12 +66,11 @@ class CurTransaction extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return ListTile(
                         title: Text(cart[index].name),
-                        subtitle: Text(fmf
-                            .copyWith(
-                              amount: transaction.profit.toDouble(),
-                            )
-                            .output
-                            .symbolOnLeft),
+                        subtitle: Text(
+                          currencyFormatter.format(
+                            transaction.profit.toDouble(),
+                          ),
+                        ),
                         trailing:
                             Text('${cart[index].pcs} ${cart[index].unit}'),
                       );
@@ -82,10 +82,7 @@ class CurTransaction extends StatelessWidget {
                       'Total',
                       style: Theme.of(context).textTheme.subtitle,
                     ),
-                    subtitle: Text(fmf
-                        .copyWith(amount: transaction.total.toDouble())
-                        .output
-                        .symbolOnLeft),
+                    subtitle: Text(currencyFormatter.format(transaction.total)),
                     trailing: RichText(
                       text: TextSpan(
                         text: 'Profit\n',
@@ -94,16 +91,16 @@ class CurTransaction extends StatelessWidget {
                           TextSpan(
                             style: Theme.of(context).textTheme.body1,
                             text:
-                                '${fmf.copyWith(amount: transaction.profit.toDouble()).output.symbolOnLeft}',
+                                '${currencyFormatter.format(transaction.profit.toDouble())}',
                           )
                         ],
                       ),
                     ),
                   ),
                   Text(
-                      'Bayar deposit : ${fmf.copyWith(amount: transaction.deposit).output.symbolOnLeft}'),
+                      'Bayar deposit : ${currencyFormatter.format(transaction.deposit)}'),
                   Text(
-                      'Bayar langsung : ${fmf.copyWith(amount: (transaction.deposit - transaction.total).abs()).output.symbolOnLeft}')
+                      'Bayar langsung : ${currencyFormatter.format((transaction.deposit - transaction.total).abs())}')
                 ],
               ),
             ),
@@ -150,7 +147,7 @@ class CurTransaction extends StatelessWidget {
                           color: Colors.transparent,
                         ),
                         Text(
-                          'Omzet : ${fmf.copyWith(amount: bloc.omzet).output.symbolOnLeft}',
+                          'Omzet : ${currencyFormatter.format(bloc.omzet)}',
                           style: Theme.of(context).textTheme.title,
                         ),
                       ],
@@ -184,11 +181,9 @@ class CurTransaction extends StatelessWidget {
                                 (current, value) =>
                                     current + value.name + ', '),
                           ),
-                          subtitle: Text(fmf
-                              .copyWith(
-                                  amount: transactions[index].total)
-                              .output
-                              .symbolOnLeft),
+                          subtitle: Text(
+                            currencyFormatter.format(transactions[index].total),
+                          ),
                           trailing: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             mainAxisAlignment: MainAxisAlignment.center,

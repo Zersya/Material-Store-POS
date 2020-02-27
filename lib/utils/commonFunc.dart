@@ -1,15 +1,9 @@
-import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:intl/intl.dart';
 
-FlutterMoneyFormatter fmf = new FlutterMoneyFormatter(
-  amount: 0,
-  settings: MoneyFormatterSettings(
-      symbol: 'Rp. ',
-      thousandSeparator: '.',
-      decimalSeparator: ',',
-      symbolAndNumberSeparator: ' ',
-      fractionDigits: 0,
-      compactFormatType: CompactFormatType.short),
-);
+
+NumberFormat currencyFormatter = NumberFormat.currency(
+    locale: 'id', decimalDigits: 0, name: 'Rp. ', symbol: 'Rp. ');
+
 
 String numberToStrDay(int number) {
   switch (number) {

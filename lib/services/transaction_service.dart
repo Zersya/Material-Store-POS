@@ -61,7 +61,7 @@ class TransactionService extends CustomerBaseService{
   Future<MyResponse> fetchTransactionAll() async {
     try {
       Stream<QuerySnapshot> snapshot =
-          firestore.collection('transactions').snapshots();
+          firestore.collection('transactions').orderBy('createdAt', descending: true).snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);

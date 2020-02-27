@@ -116,27 +116,8 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                             builder: (context, snapshot) {
                               if (snapshot.hasData &&
                                   snapshot.data.length > 0) {
-                                List<Map<String, dynamic>> list = List();
-                                DateTime curDay;
-                                double sumDay = 0;
-                                _reportBloc.transStream.value.forEach((val) {
-                                  final DateTime dt =
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                    val.createdAt,
-                                  );
-
-                                  if (curDay != null && curDay.day != dt.day) {
-                                    Map<String, dynamic> map = {
-                                      'value': sumDay,
-                                      'date': curDay
-                                    };
-                                    list.add(map);
-                                    sumDay = 0;
-                                  }
-                                  curDay = dt;
-                                  sumDay += val.profit;
-                                });
-                                return lineChart(context, start, list);
+                                return lineChart(context, start,
+                                    _reportBloc.getProfitDataChart());
                               }
                               return Container();
                             },
@@ -189,11 +170,8 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                               builder: (context, snapshot) {
                                 if (snapshot.hasData) {
                                   return Text(
-                                    fmf
-                                        .copyWith(
-                                            amount: double.parse(snapshot.data))
-                                        .output
-                                        .symbolOnLeft,
+                                    currencyFormatter
+                                        .format(double.parse(snapshot.data)),
                                     style: Theme.of(context).textTheme.title,
                                   );
                                 }
@@ -267,10 +245,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Text(
-                        fmf
-                            .copyWith(amount: double.parse(snapshot.data))
-                            .output
-                            .symbolOnLeft,
+                        currencyFormatter.format(double.parse(snapshot.data)),
                       );
                     }
                     return Container();
@@ -289,10 +264,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       return Text(
-                        fmf
-                            .copyWith(amount: double.parse(snapshot.data))
-                            .output
-                            .symbolOnLeft,
+                        currencyFormatter.format(double.parse(snapshot.data)),
                       );
                     }
                     return Container();

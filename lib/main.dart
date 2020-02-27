@@ -3,10 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:harco_app/helper/locator.dart';
 import 'package:harco_app/screens/splash/splash_screen.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'helper/routerHelper.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  initializeDateFormatting();
+
   Firestore firestore = Firestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
 

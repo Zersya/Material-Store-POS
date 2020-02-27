@@ -219,7 +219,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                   if (_selectedCustomer != null &&
                       _selectedCustomer.deposit > 0)
                     Text(
-                      'Saldo: ${fmf.copyWith(amount: _selectedCustomer.deposit).output.nonSymbol}',
+                      'Saldo: ${currencyFormatter.format(_selectedCustomer.deposit)}',
                       style: Theme.of(context).textTheme.subtitle,
                     ),
                   Divider(
@@ -239,12 +239,11 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
 
                       return ListTile(
                         title: Text(cart[index].name),
-                        subtitle: Text(fmf
-                            .copyWith(
-                              amount: amount,
-                            )
-                            .output
-                            .symbolOnLeft),
+                        subtitle: Text(
+                          currencyFormatter.format(
+                            amount,
+                          ),
+                        ),
                         trailing:
                             Text('${cart[index].pcs} ${cart[index].unit}'),
                       );
@@ -257,10 +256,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       Column(
                         children: <Widget>[
                           Text(
-                            fmf
-                                .copyWith(amount: sum.toDouble())
-                                .output
-                                .symbolOnLeft,
+                            currencyFormatter.format(sum.toDouble()),
                             style: Theme.of(context).textTheme.title,
                           ),
                         ],
@@ -272,12 +268,8 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                             Text('Sisa'),
                             Divider(height: 8, color: Colors.transparent),
                             Text(
-                              fmf
-                                  .copyWith(
-                                      amount: _selectedCustomer.deposit -
-                                          sum.toDouble())
-                                  .output
-                                  .symbolOnLeft,
+                              currencyFormatter.format(
+                                  _selectedCustomer.deposit - sum.toDouble()),
                               style: Theme.of(context).textTheme.caption,
                             ),
                           ],
@@ -572,8 +564,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         return ListTile(
           leading: Icon(Icons.person),
           title: Text(suggestion.name),
-          subtitle: Text(
-              fmf.copyWith(amount: suggestion.deposit).output.symbolOnLeft),
+          subtitle: Text(currencyFormatter.format(suggestion.deposit)),
         );
       },
       onSuggestionSelected: (suggestion) {
@@ -611,10 +602,8 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         return ListTile(
           leading: Icon(Icons.shopping_cart),
           title: Text(suggestion.name),
-          subtitle: Text(fmf
-              .copyWith(amount: double.parse(suggestion.priceBuy))
-              .output
-              .symbolOnLeft),
+          subtitle:
+              Text(currencyFormatter.format(double.parse(suggestion.priceBuy))),
         );
       },
       onSuggestionSelected: (suggestion) {

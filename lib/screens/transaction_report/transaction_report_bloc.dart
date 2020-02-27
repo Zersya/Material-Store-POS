@@ -1,3 +1,4 @@
+import "package:collection/collection.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:harco_app/helper/responseHelper.dart';
@@ -7,6 +8,7 @@ import 'package:harco_app/services/cash_service.dart';
 import 'package:harco_app/utils/commonFunc.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
+import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:rxdart/subjects.dart';
 
@@ -39,6 +41,30 @@ class TransactionReportBloc extends TransBaseHelper {
   ValueStream<String> get timeStartStream => subjectTimeStart.stream;
   ValueStream<Map<String, dynamic>> get timeMapStream => subjectTimeMap.stream;
   ValueStream<String> get incomeStream => subjectIncome.stream;
+
+  List<Map<String, dynamic>> getProfitDataChart() {
+    List<Map<String, dynamic>> list = List();
+
+    Map groupByDay = groupBy(
+      transStream.value,
+      (trans) {
+        DateTime dt = DateTime.fromMillisecondsSinceEpoch(
+          trans.createdAt,
+        );
+
+        return DateTime(dt.year, dt.month, dt.day);
+      },
+    );
+
+    groupByDay.forEach((key, val) {
+      Map<String, dynamic> map = {
+        'value': val.fold(0, (sum, trans) => sum += trans.profit),
+        'date': key
+      };
+      list.add(map);
+    });
+    return list;
+  }
 
   void insertCash(customDt) {
     cashsOut = this
@@ -148,12 +174,12 @@ class TransactionReportBloc extends TransBaseHelper {
     listen.onDone(() => listen.cancel());
   }
 
-
   Future deleteTransaction(prefTrans.Transaction transaction) async {
     this.subjectState.sink.add(ViewState.LOADING);
     transactions.removeWhere((val) => val.id == transaction.id);
     this.subjectTransactions.sink.add(transactions);
-    MyResponse response = await transactionService.deleteTransaction(transaction.id);
+    MyResponse response =
+        await transactionService.deleteTransaction(transaction.id);
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(ViewState.IDLE);
   }

@@ -148,10 +148,9 @@ class _CashScreenState extends State<CashScreen> {
                   title: Text(
                     cashes[index].description,
                   ),
-                  subtitle: Text(fmf
-                      .copyWith(amount: cashes[index].amount.toDouble())
-                      .output
-                      .symbolOnLeft),
+                  subtitle: Text(
+                    currencyFormatter.format(cashes[index].amount.toDouble()),
+                  ),
                   trailing: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     mainAxisAlignment: MainAxisAlignment.center,

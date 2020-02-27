@@ -44,7 +44,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   focusNode: _nodeName,
                   controller: _controllerName,
                   decoration: InputDecoration(labelText: 'Nama'),
-                  onFieldSubmitted: (val){
+                  onFieldSubmitted: (val) {
                     FocusScope.of(context).requestFocus(_nodeDepo);
                   },
                   validator: (value) {
@@ -60,7 +60,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Deposit'),
-                  onFieldSubmitted: (val){
+                  onFieldSubmitted: (val) {
                     FocusScope.of(context).unfocus();
                   },
                   validator: (value) {
@@ -88,7 +88,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 Customer newCustomer = customer != null
                     ? customer
                     : Customer(name: _controllerName.text);
-                    
+
                 newCustomer.name = _controllerName.text;
                 newCustomer.deposit = _controllerDeposit.numberValue;
                 _customerBloc.setCustomer(newCustomer);
@@ -149,10 +149,9 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   dialogCustomer(context, snapshot.data[index]);
                 },
                 title: Text(snapshot.data[index].name),
-                subtitle: Text(fmf
-                    .copyWith(amount: snapshot.data[index].deposit)
-                    .output
-                    .symbolOnLeft),
+                subtitle: Text(
+                  currencyFormatter.format(snapshot.data[index].deposit),
+                ),
               );
             },
           );

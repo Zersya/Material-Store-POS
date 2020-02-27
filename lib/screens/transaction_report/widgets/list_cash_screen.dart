@@ -9,7 +9,9 @@ class ListCashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Daftar Kas'),),
+      appBar: AppBar(
+        title: Text('List Kas'),
+      ),
       body: ListView.separated(
         itemCount: cashs.length,
         separatorBuilder: (context, index) {
@@ -29,10 +31,8 @@ class ListCashScreen extends StatelessWidget {
             title: Text(
               cashs[index].description,
             ),
-            subtitle: Text(fmf
-                .copyWith(amount: cashs[index].amount.toDouble())
-                .output
-                .symbolOnLeft),
+            subtitle:
+                Text(currencyFormatter.format(cashs[index].amount.toDouble())),
             trailing: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.center,

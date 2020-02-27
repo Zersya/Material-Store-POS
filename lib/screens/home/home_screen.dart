@@ -210,10 +210,8 @@ class CardTop extends StatelessWidget {
                         style: Theme.of(context).textTheme.overline,
                         children: [
                           TextSpan(
-                              text: fmf
-                                  .copyWith(amount: snapshot.data.toDouble())
-                                  .output
-                                  .nonSymbol,
+                              text: currencyFormatter
+                                  .format(snapshot.data.toDouble()),
                               style: Theme.of(context).textTheme.title)
                         ]),
                   );

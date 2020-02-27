@@ -11,7 +11,7 @@ class ListTransactionScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Daftar Kas'),
+        title: Text('List Transaksi'),
       ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
