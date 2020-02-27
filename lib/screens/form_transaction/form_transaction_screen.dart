@@ -119,7 +119,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
     _controllerName.clear();
     _controllerPriceBuy.text = '0';
     _controllerPriceSell.text = '0';
-    _controllerPieces.text = '0';
+    _controllerPieces.clear();
 
     _addTransactionBloc.subjectIsNewItem.sink.add(true);
   }
@@ -408,7 +408,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                                 _controllerName.clear();
                                 _controllerPriceBuy.text = '0';
                                 _controllerPriceSell.text = '0';
-                                _controllerPieces.text = '0';
+                                _controllerPieces.clear();
                                 FocusScope.of(context).unfocus();
                               },
                             ),
