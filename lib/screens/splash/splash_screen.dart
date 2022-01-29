@@ -33,9 +33,12 @@ class _SplashScreenState extends State<SplashScreen> {
             children: <Widget>[
               Text(
                 'Harco',
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
-              Divider(height: 16.0, color: Colors.transparent,),
+              Divider(
+                height: 16.0,
+                color: Colors.transparent,
+              ),
               Center(
                   child: CircularProgressIndicator(
                 strokeWidth: 2,

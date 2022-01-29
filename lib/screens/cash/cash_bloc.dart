@@ -35,7 +35,7 @@ class CashBloc extends BaseReponseBloc<ViewState> {
 
     final listen = response.result.listen((val) {
       List<Cash> cashes =
-          val.documents.map((val) => Cash.fromMap(val.data)).toList();
+          val.docs.map((val) => Cash.fromMap(val.data())).toList();
 
       this.subjectListCash.sink.add(cashes);
       this.subjectResponse.sink.add(response);

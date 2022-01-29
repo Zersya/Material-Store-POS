@@ -43,7 +43,7 @@ class ListCashScreen extends StatelessWidget {
                   dateTime,
                   style: Theme.of(context)
                       .textTheme
-                      .body2
+                      .bodyText1
                       .copyWith(color: Colors.black54),
                 )
               ],

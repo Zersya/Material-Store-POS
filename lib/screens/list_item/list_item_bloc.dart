@@ -34,7 +34,7 @@ class ListItemBloc extends BaseReponseBloc<ViewState> {
     MyResponse<Stream<QuerySnapshot>> response = await _itemService.fetchItem();
 
     final listen = response.result.listen((val) {
-      items = val.documents.map((val) => Item.fromMap(val.data)).toList();
+      items = val.docs.map((val) => Item.fromMap(val.data())).toList();
       this.subjectListItem.sink.add(items);
       this.subjectResponse.sink.add(response);
 

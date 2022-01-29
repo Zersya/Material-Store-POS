@@ -7,21 +7,19 @@ import 'package:harco_app/helper/responseHelper.dart';
 
 import 'dart:io';
 
-
 class AuthService {
   fa.FirebaseAuth auth;
-  Firestore firestore;
+  FirebaseFirestore firestore;
 
   AuthService(this.firestore, this.auth);
 
   Future<MyResponse> loginUser(User user) async {
     try {
-      fa.AuthResult res = await auth.signInWithEmailAndPassword(
+      fa.UserCredential res = await auth.signInWithEmailAndPassword(
           email: user.email, password: user.password);
       user = User(res.user.email, id: res.user.uid);
 
-      return MyResponse<User>(ResponseState.SUCCESS, user,
-          message: null);
+      return MyResponse<User>(ResponseState.SUCCESS, user, message: null);
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
           message: 'Kesalahan jaringan');

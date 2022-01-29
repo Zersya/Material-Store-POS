@@ -80,16 +80,17 @@ class CurTransaction extends StatelessWidget {
                   ListTile(
                     title: Text(
                       'Total',
-                      style: Theme.of(context).textTheme.subtitle,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
-                    subtitle: Text(currencyFormatter.format(transaction.total)),
+                    subtitle:
+                        Text(currencyFormatter.format(transaction.total)),
                     trailing: RichText(
                       text: TextSpan(
                         text: 'Profit\n',
-                        style: Theme.of(context).textTheme.subtitle,
+                        style: Theme.of(context).textTheme.subtitle2,
                         children: [
                           TextSpan(
-                            style: Theme.of(context).textTheme.body1,
+                            style: Theme.of(context).textTheme.bodyText2,
                             text:
                                 '${currencyFormatter.format(transaction.profit.toDouble())}',
                           )
@@ -140,7 +141,7 @@ class CurTransaction extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           '$title : ${snapshot.data.length}',
-                          style: Theme.of(context).textTheme.title,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                         Divider(
                           height: 16.0,
@@ -148,7 +149,7 @@ class CurTransaction extends StatelessWidget {
                         ),
                         Text(
                           'Omzet : ${currencyFormatter.format(bloc.omzet)}',
-                          style: Theme.of(context).textTheme.title,
+                          style: Theme.of(context).textTheme.headline6,
                         ),
                       ],
                     ),
@@ -194,7 +195,7 @@ class CurTransaction extends StatelessWidget {
                                 dateTime,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .body2
+                                    .bodyText1
                                     .copyWith(color: Colors.black54),
                               )
                             ],

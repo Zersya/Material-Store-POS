@@ -145,7 +145,8 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                                   children: <Widget>[
                                     Text(
                                       'Profit ${_reportBloc.subjectTimeSelect.value}',
-                                      style: Theme.of(context).textTheme.title,
+                                      style:
+                                          Theme.of(context).textTheme.headline6,
                                     ),
                                     GestureDetector(
                                         onTap: () {
@@ -171,7 +172,8 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                                   return Text(
                                     currencyFormatter
                                         .format(double.parse(snapshot.data)),
-                                    style: Theme.of(context).textTheme.title,
+                                    style:
+                                        Theme.of(context).textTheme.headline6,
                                   );
                                 }
                                 return Container();
@@ -224,7 +226,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                 builder: (context, snapshot) {
                   return Text(
                     'Kas ${_reportBloc.subjectTimeSelect.value}',
-                    style: Theme.of(context).textTheme.title,
+                    style: Theme.of(context).textTheme.headline6,
                   );
                 }),
             Divider(
@@ -337,7 +339,7 @@ class InformationTime extends StatelessWidget {
                   'Tanggal Mulai',
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle
+                      .subtitle2
                       .copyWith(color: Colors.grey[500]),
                 ),
                 Divider(
@@ -348,7 +350,7 @@ class InformationTime extends StatelessWidget {
                   snapshot.data,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle
+                      .subtitle2
                       .copyWith(color: Colors.grey[500]),
                 ),
               ],
@@ -360,7 +362,7 @@ class InformationTime extends StatelessWidget {
                   'Tanggal Selesai',
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle
+                      .subtitle2
                       .copyWith(color: Colors.grey[500]),
                 ),
                 Divider(
@@ -371,7 +373,7 @@ class InformationTime extends StatelessWidget {
                   custTime,
                   style: Theme.of(context)
                       .textTheme
-                      .subtitle
+                      .subtitle2
                       .copyWith(color: Colors.grey[500]),
                 ),
               ],

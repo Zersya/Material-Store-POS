@@ -150,7 +150,7 @@ class _AddItemScreenState extends State<FormItemScreen> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
                           labelText: 'Harga beli',
@@ -174,7 +174,7 @@ class _AddItemScreenState extends State<FormItemScreen> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
                           labelText: 'Harga jual',

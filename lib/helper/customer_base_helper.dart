@@ -13,7 +13,6 @@ class CustomerBaseHelper extends BaseReponseBloc<ViewState> {
 
   List<Customer> customers = List();
 
-
   CustomerBaseHelper() {
     subjectListCustomer = BehaviorSubject<List<Customer>>();
   }
@@ -27,7 +26,7 @@ class CustomerBaseHelper extends BaseReponseBloc<ViewState> {
 
     final listen = response.result.listen((list) {
       customers = List<Customer>.from(
-          list.documents.map((val) => Customer.fromMap(val.data)).toList());
+          list.docs.map((val) => Customer.fromMap(val.data())).toList());
 
       this.subjectListCustomer.sink.add(customers);
       this.subjectResponse.sink.add(response);

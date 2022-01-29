@@ -6,13 +6,13 @@ import 'package:harco_app/services/customer_base_service.dart';
 import 'package:harco_app/utils/enum.dart';
 
 class CustomerService extends CustomerBaseService{
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
 
   CustomerService(this.firestore) : super(firestore);
 
   Future<MyResponse> deleteCustomer(String id) async {
     try {
-      firestore.collection('customers').document(id).delete();
+      firestore.collection('customers').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
           message: 'Sukses menghapus pelanggan');
     } on SocketException {

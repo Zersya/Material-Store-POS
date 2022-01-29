@@ -21,8 +21,8 @@ class HomeBloc extends TransBaseHelper {
         await transactionService.fetchTransactionToday();
 
     final listen = response.result.listen((val) {
-      transactions = val.documents
-          .map((val) => prefTrans.Transaction.fromMap(val.data))
+      transactions = val.docs
+          .map((val) => prefTrans.Transaction.fromMap(val.data()))
           .toList();
       transactions = transactions.reversed.toList();
       this.subjectTransactions.sink.add(transactions);

@@ -64,7 +64,7 @@ class FormTransactionBloc extends CustomerBaseHelper {
 
     final listen = response.result.listen((val) {
       List<Unit> units =
-          val.documents.map((val) => Unit.fromMap(val.data)).toList();
+          val.docs.map((val) => Unit.fromMap(val.data())).toList();
       this._subjectListUnit.sink.add(units);
       this.subjectResponse.sink.add(response);
       this.subjectState.sink.add(ViewState.IDLE);
@@ -77,7 +77,7 @@ class FormTransactionBloc extends CustomerBaseHelper {
     MyResponse<Stream<QuerySnapshot>> response = await _itemService.fetchItem();
 
     final listen = response.result.listen((val) {
-      items = val.documents.map((val) => Item.fromMap(val.data)).toList();
+      items = val.docs.map((val) => Item.fromMap(val.data())).toList();
 
       this._subjectListItem.sink.add(items);
       this.subjectResponse.sink.add(response);

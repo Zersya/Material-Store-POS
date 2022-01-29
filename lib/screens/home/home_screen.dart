@@ -198,7 +198,7 @@ class CardTop extends StatelessWidget {
           children: <Widget>[
             Text(
               'Profit ${numberToStrDay(DateTime.now().weekday)}',
-              style: Theme.of(context).textTheme.subtitle,
+              style: Theme.of(context).textTheme.subtitle2,
             ),
             StreamBuilder<double>(
               stream: homeBloc.profitTodayStream,
@@ -212,7 +212,7 @@ class CardTop extends StatelessWidget {
                           TextSpan(
                               text: currencyFormatter
                                   .format(snapshot.data.toDouble()),
-                              style: Theme.of(context).textTheme.title)
+                              style: Theme.of(context).textTheme.headline6)
                         ]),
                   );
                 }

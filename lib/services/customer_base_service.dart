@@ -6,7 +6,7 @@ import 'package:harco_app/models/customer.dart';
 import 'package:harco_app/utils/enum.dart';
 
 class CustomerBaseService {
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
 
   CustomerBaseService(this.firestore);
 
@@ -29,7 +29,7 @@ class CustomerBaseService {
     try {
       String id;
       if (customer.id == null) {
-        id = firestore.collection('customers').document().documentID;
+        id = firestore.collection('customers').doc().id;
         customer.id = id;
       } else {
         id = customer.id;
@@ -37,8 +37,8 @@ class CustomerBaseService {
 
       await firestore
           .collection('customers')
-          .document(id)
-          .setData(customer.toMap())
+          .doc(id)
+          .set(customer.toMap())
           .catchError((err) {
         throw Exception(err);
       });
@@ -57,8 +57,8 @@ class CustomerBaseService {
     try {
       await firestore
           .collection('customers')
-          .document(customer.id)
-          .setData(customer.toMap())
+          .doc(customer.id)
+          .set(customer.toMap())
           .catchError((err) {
         throw Exception(err);
       });

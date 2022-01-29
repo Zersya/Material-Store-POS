@@ -34,7 +34,8 @@ class _CustomerScreenState extends State<CustomerScreen> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(customer != null ? 'Update pelanggan' : 'Tambah pelanggan'),
+        title:
+            Text(customer != null ? 'Update pelanggan' : 'Tambah pelanggan'),
         content: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -57,7 +58,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 TextFormField(
                   focusNode: _nodeDepo,
                   controller: _controllerDeposit,
-                  inputFormatters: [WhitelistingTextInputFormatter.digitsOnly],
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(labelText: 'Deposit'),
                   onFieldSubmitted: (val) {

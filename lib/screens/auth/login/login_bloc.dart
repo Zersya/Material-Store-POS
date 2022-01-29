@@ -32,7 +32,7 @@ class LoginBloc extends BaseReponseBloc<FormState> {
 
       pref.setString('UID', response.result.id);
       pref.setString('EMAIL', response.result.email);
-      pref.setString('NAME', response.result.name);
+      // pref.setString('NAME', response.result.name);
     }
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(FormState.IDLE);

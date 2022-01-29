@@ -10,18 +10,19 @@ import 'package:harco_app/services/transaction_service.dart';
 
 GetIt getIt = GetIt.instance;
 
-void locator(Firestore firestore, FirebaseAuth auth, bool isTest) {
-      
+void locator(FirebaseFirestore firestore, FirebaseAuth auth, bool isTest) {
   if (isTest) {
     getIt.reset();
   }
 
   getIt.registerLazySingleton<ItemService>(() => ItemService(firestore));
-  getIt.registerLazySingleton<TransactionService>(() => TransactionService(firestore));
+  getIt.registerLazySingleton<TransactionService>(
+      () => TransactionService(firestore));
   getIt.registerLazySingleton<AuthService>(() => AuthService(firestore, auth));
   getIt.registerLazySingleton<CashService>(() => CashService(firestore));
-  getIt.registerLazySingleton<CustomerService>(() => CustomerService(firestore));
-  
-  getIt.registerLazySingleton<CustomerBaseService>(() => CustomerBaseService(firestore));
-  
+  getIt
+      .registerLazySingleton<CustomerService>(() => CustomerService(firestore));
+
+  getIt.registerLazySingleton<CustomerBaseService>(
+      () => CustomerBaseService(firestore));
 }

@@ -102,7 +102,7 @@ class _CashScreenState extends State<CashScreen> {
               return Center(
                 child: Text(
                   'Tidak ada kas',
-                  style: Theme.of(context).textTheme.headline,
+                  style: Theme.of(context).textTheme.headline5,
                 ),
               );
             }
@@ -139,7 +139,7 @@ class _CashScreenState extends State<CashScreen> {
                           category,
                           style: Theme.of(context)
                               .textTheme
-                              .subtitle
+                              .subtitle2
                               .copyWith(color: Colors.white),
                         ),
                       ),
@@ -161,7 +161,7 @@ class _CashScreenState extends State<CashScreen> {
                         dateTime,
                         style: Theme.of(context)
                             .textTheme
-                            .body2
+                            .bodyText1
                             .copyWith(color: Colors.black54),
                       )
                     ],
@@ -343,7 +343,7 @@ class _CashScreenState extends State<CashScreen> {
                               textInputAction: TextInputAction.next,
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                WhitelistingTextInputFormatter.digitsOnly,
+                                FilteringTextInputFormatter.digitsOnly,
                               ],
                               decoration: InputDecoration(
                                 labelText: 'Nilai kas',

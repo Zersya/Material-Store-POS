@@ -210,7 +210,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                 children: <Widget>[
                   Text(
                     'Pembeli: ${_controllerCustomerName.text.isNotEmpty ? _controllerCustomerName.text : '-'}',
-                    style: Theme.of(context).textTheme.subtitle,
+                    style: Theme.of(context).textTheme.subtitle2,
                   ),
                   Divider(
                     height: 4,
@@ -220,7 +220,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       _selectedCustomer.deposit > 0)
                     Text(
                       'Saldo: ${currencyFormatter.format(_selectedCustomer.deposit)}',
-                      style: Theme.of(context).textTheme.subtitle,
+                      style: Theme.of(context).textTheme.subtitle2,
                     ),
                   Divider(
                     height: 16,
@@ -257,7 +257,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         children: <Widget>[
                           Text(
                             currencyFormatter.format(sum.toDouble()),
-                            style: Theme.of(context).textTheme.title,
+                            style: Theme.of(context).textTheme.headline6,
                           ),
                         ],
                       ),
@@ -424,7 +424,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
                         decoration: InputDecoration(
                           labelText: 'Harga beli',
@@ -448,7 +448,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.number,
                         inputFormatters: [
-                          WhitelistingTextInputFormatter.digitsOnly,
+                          FilteringTextInputFormatter.digitsOnly,
                         ],
                         decoration: InputDecoration(
                           labelText: 'Harga jual',
@@ -481,7 +481,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
-                          WhitelistingTextInputFormatter(RegExp("[0-9,.]")),
+                          FilteringTextInputFormatter(RegExp("[0-9,.]"), allow: true),
                         ],
                         decoration: InputDecoration(
                           labelText: 'Jumlah satuan',
@@ -504,7 +504,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Keranjang',
-                          style: Theme.of(context).textTheme.headline,
+                          style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
                       CartItem(addTransactionBloc: _addTransactionBloc)

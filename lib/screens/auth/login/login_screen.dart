@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
             children: <Widget>[
               Text(
                 'Masuk Harco POS',
-                style: Theme.of(context).textTheme.headline,
+                style: Theme.of(context).textTheme.headline5,
               ),
               Divider(
                 height: 62,
@@ -92,22 +92,24 @@ class _LoginScreenState extends State<LoginScreen> {
                                   children: <Widget>[
                                     Material(
                                       elevation: 2,
-                                      borderRadius:
-                                          BorderRadius.circular(radiusInputField),
+                                      borderRadius: BorderRadius.circular(
+                                          radiusInputField),
                                       shadowColor: Theme.of(context)
                                           .colorScheme
                                           .primaryVariant,
                                       child: TextFormField(
                                         controller: _emailController,
                                         focusNode: _emailFN,
-                                        keyboardType: TextInputType.emailAddress,
+                                        keyboardType:
+                                            TextInputType.emailAddress,
                                         textInputAction: TextInputAction.next,
                                         decoration: InputDecoration(
                                           hintText: 'Email',
                                           prefixIcon: Icon(Icons.email),
                                           border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.circular(
-                                                  radiusInputField)),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      radiusInputField)),
                                         ),
                                         onFieldSubmitted: (val) {
                                           FocusScope.of(context)
@@ -189,7 +191,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: RaisedButton(
                                         elevation: 2,
                                         child: Text('Masuk',
-                                            style: Theme.of(context).textTheme.button),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button),
                                         onPressed: () {
                                           _submitLogin();
                                         },

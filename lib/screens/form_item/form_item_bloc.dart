@@ -7,7 +7,6 @@ import 'package:harco_app/models/user.dart';
 import 'package:harco_app/services/item_service.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:rxdart/subjects.dart';
 
 class AddItemBloc extends BaseReponseBloc<FormState> {
   ItemService _itemService = GetIt.I<ItemService>();
@@ -30,7 +29,7 @@ class AddItemBloc extends BaseReponseBloc<FormState> {
     final listen = response.result.listen((val) {
       // this.subjectListUnit.sink.add(val.data);
       List<Unit> units =
-          val.documents.map((val) => Unit.fromMap(val.data)).toList();
+          val.docs.map((val) => Unit.fromMap(val.data())).toList();
       this.subjectListUnit.sink.add(units);
       this.subjectResponse.sink.add(response);
       this.subjectState.sink.add(FormState.IDLE);

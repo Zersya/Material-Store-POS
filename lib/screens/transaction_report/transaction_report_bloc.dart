@@ -140,7 +140,7 @@ class TransactionReportBloc extends TransBaseHelper {
         await _cashService.fetchCashAll();
 
     final listen = response.result.listen((val) {
-      cashs = val.documents.map((val) => Cash.fromMap(val.data)).toList();
+      cashs = val.docs.map((val) => Cash.fromMap(val.data())).toList();
 
       this.subjectTransactions.sink.add(transactions);
       this.subjectResponse.sink.add(response);
@@ -158,8 +158,8 @@ class TransactionReportBloc extends TransBaseHelper {
         await transactionService.fetchTransactionAll();
 
     final listen = response.result.listen((val) {
-      transactions = val.documents
-          .map((val) => prefTrans.Transaction.fromMap(val.data))
+      transactions = val.docs
+          .map((val) => prefTrans.Transaction.fromMap(val.data()))
           .toList();
       double valIncome = 0;
       transactions.forEach((val) => valIncome = valIncome + val.profit);

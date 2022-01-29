@@ -7,18 +7,18 @@ import 'package:harco_app/models/unit.dart';
 import 'package:harco_app/utils/enum.dart';
 
 class ItemService {
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
 
   ItemService(this.firestore);
 
   Future<MyResponse> createItem(Item item) async {
     try {
-      item.id = firestore.collection('items').document().documentID;
+      item.id = firestore.collection('items').doc().id;
 
       await firestore
           .collection('items')
-          .document(item.id)
-          .setData(item.toMap())
+          .doc(item.id)
+          .set(item.toMap())
           .catchError((err) {
         throw Exception(err);
       });
@@ -35,12 +35,12 @@ class ItemService {
 
   Future<MyResponse> createUnit(Unit unit) async {
     try {
-      unit.id = firestore.collection('units').document().documentID;
+      unit.id = firestore.collection('units').doc().id;
 
       await firestore
           .collection('units')
-          .document(unit.id)
-          .setData(unit.toMap())
+          .doc(unit.id)
+          .set(unit.toMap())
           .catchError((err) {
         throw Exception(err);
       });
@@ -72,7 +72,7 @@ class ItemService {
 
   Future<MyResponse> deleteItem(String id) async {
     try {
-      firestore.collection('items').document(id).delete();
+      firestore.collection('items').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
           message: 'Sukses menghapus barang');
     } on SocketException {

@@ -7,7 +7,7 @@ import 'package:harco_app/utils/enum.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
 
 class TransactionService extends CustomerBaseService{
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
 
   TransactionService(this.firestore) : super(firestore);
 
@@ -15,12 +15,12 @@ class TransactionService extends CustomerBaseService{
       prefTrans.Transaction transaction) async {
     try {
       transaction.id =
-          firestore.collection('transactions').document().documentID;
+          firestore.collection('transactions').doc().id;
 
       await firestore
           .collection('transactions')
-          .document(transaction.id)
-          .setData(transaction.toMap())
+          .doc(transaction.id)
+          .set(transaction.toMap())
           .catchError((err) {
         throw Exception(err);
       });
@@ -76,7 +76,7 @@ class TransactionService extends CustomerBaseService{
 
   Future<MyResponse> deleteTransaction(String id) async {
     try {
-      firestore.collection('transactions').document(id).delete();
+      firestore.collection('transactions').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
           message: 'Sukses menghapus barang');
     } on SocketException {

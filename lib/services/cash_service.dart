@@ -6,19 +6,19 @@ import 'package:harco_app/utils/enum.dart';
 import 'package:harco_app/models/cash.dart';
 
 class CashService {
-  final Firestore firestore;
+  final FirebaseFirestore firestore;
 
   CashService(this.firestore);
 
   Future<MyResponse> setCash(Cash cash) async {
     try {
       if (cash.id == null) {
-        cash.id = firestore.collection('cashes').document().documentID;
+        cash.id = firestore.collection('cashes').doc().id;
       }
       await firestore
           .collection('cashes')
-          .document(cash.id)
-          .setData(cash.toMap())
+          .doc(cash.id)
+          .set(cash.toMap())
           .catchError((err) {
         throw Exception(err);
       });
@@ -73,7 +73,7 @@ class CashService {
 
   Future<MyResponse> deleteCash(String id) async {
     try {
-      firestore.collection('cashes').document(id).delete();
+      firestore.collection('cashes').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
           message: 'Sukses menghapus kas');
     } on SocketException {
