@@ -67,9 +67,9 @@ class _AddItemScreenState extends State<FormItemScreen> {
     String priceSell = _controllerPriceSell.numberValue.toInt().toString();
 
     if (_addItemBloc.unitStream.value == null) {
-      _buildShowSnackBar(context, 'Silahkan pilih satuan barang');
+      _buildShowSnackBar(context, 'Please select unit');
     } else if (priceSell == '0' || priceBuy == '0') {
-      _buildShowSnackBar(context, 'Bilangan tidak boleh nol');
+      _buildShowSnackBar(context, 'Value cannot be 0');
     } else {
       Item item = Item(
         _controllerName.text.toLowerCase(),
@@ -102,11 +102,11 @@ class _AddItemScreenState extends State<FormItemScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Tambah barang'),
+        title: Text('Add Goods'),
       ),
       bottomNavigationBar: SafeArea(
-        child: RaisedButton(
-          child: Text('Tambahkan'),
+        child: ElevatedButton(
+          child: Text('Add'),
           onPressed: () {
             if (_formKey.currentState.validate()) {
               _submitBarang();
@@ -129,14 +129,14 @@ class _AddItemScreenState extends State<FormItemScreen> {
                         focusNode: _nodeName,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
-                          labelText: 'Nama barang',
+                          labelText: 'Goods Name',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodePriceBuy);
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Nama barang tidak boleh kosong';
+                            return 'Goods name can\'t be empty';
                           }
                           return null;
                         },
@@ -153,14 +153,14 @@ class _AddItemScreenState extends State<FormItemScreen> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Harga beli',
+                          labelText: 'Buy Price',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodePriceSell);
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Harga beli tidak boleh kosong';
+                            return 'Buy price can\'t be empty';
                           }
                           return null;
                         },
@@ -177,14 +177,14 @@ class _AddItemScreenState extends State<FormItemScreen> {
                           FilteringTextInputFormatter.digitsOnly
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Harga jual',
+                          labelText: 'Sell Price',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodeUnit);
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Harga jual tidak boleh kosong';
+                            return 'Sell price can\'t be empty';
                           }
                           return null;
                         },
@@ -243,20 +243,20 @@ class DropdownUnit extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Tambah satuan'),
+        title: Text('Add unit'),
         content: TextField(
           controller: controllerUnit,
-          decoration: InputDecoration(labelText: 'contoh : kg'),
+          decoration: InputDecoration(labelText: 'example : kg'),
         ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Batal'),
+          TextButton(
+            child: Text('Cancel'),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          FlatButton(
-            child: Text('Tambah'),
+          TextButton(
+            child: Text('Add'),
             onPressed: () {
               Unit unit = Unit(
                 controllerUnit.text.toLowerCase(),
@@ -299,7 +299,7 @@ class DropdownUnit extends StatelessWidget {
                           focusNode: _nodeUnit,
                           value: snapshot_2.data,
                           isExpanded: true,
-                          hint: Text('Pilih satuan'),
+                          hint: Text('Select unit'),
                           onChanged: (val) {
                             _addItemBloc.subjectUnitValue.sink.add(val);
                           },

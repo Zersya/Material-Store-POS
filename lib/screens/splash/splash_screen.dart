@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Harco',
+                'BRAND',
                 style: Theme.of(context).textTheme.headline5,
               ),
               Divider(

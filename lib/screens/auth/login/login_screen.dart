@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Text(
-                'Masuk Harco POS',
+                'Sign In Materials POS',
                 style: Theme.of(context).textTheme.headline5,
               ),
               Divider(
@@ -117,10 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                                         },
                                         validator: (val) {
                                           if (val.isEmpty) {
-                                            return 'Email tidak boleh kosong';
+                                            return 'Email cannot be empty';
                                           } else if (!EmailValidator.validate(
                                               val)) {
-                                            return 'Email tidak benar';
+                                            return 'Email is not valid';
                                           }
                                           return null;
                                         },
@@ -174,9 +174,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                               },
                                               validator: (val) {
                                                 if (val.isEmpty) {
-                                                  return 'Password tidak boleh kosong';
+                                                  return 'Password cannot be empty';
                                                 } else if (val.length < 6) {
-                                                  return 'Password terlalu pendek';
+                                                  return 'Password must be at least 6 characters';
                                                 }
                                                 return null;
                                               },
@@ -188,9 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                     ),
                                     SizedBox(
                                       width: double.infinity,
-                                      child: RaisedButton(
-                                        elevation: 2,
-                                        child: Text('Masuk',
+                                      child: ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                          elevation: 2,
+                                        ),
+                                        child: Text('Sign In',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .button),

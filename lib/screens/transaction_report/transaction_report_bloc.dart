@@ -33,7 +33,7 @@ class TransactionReportBloc extends TransBaseHelper {
     subjectCashOut = BehaviorSubject<String>();
     subjectCashIn = BehaviorSubject<String>();
 
-    subjectTimeSelect.sink.add('semua');
+    subjectTimeSelect.sink.add('all');
   }
 
   ValueStream<String> get timeSelectStream => subjectTimeSelect.stream;
@@ -97,19 +97,19 @@ class TransactionReportBloc extends TransBaseHelper {
     DateTime customDt;
 
     switch (subjectTimeSelect.value) {
-      case '1 minggu':
+      case '1 week':
         customDt = DateTime(dt.year, dt.month, dt.day - dt.weekday);
         break;
-      case '1 bulan':
+      case '1 month':
         customDt = DateTime(dt.year, dt.month, 1);
         break;
-      case '3 bulan':
+      case '3 months':
         customDt = DateTime(dt.year, dt.month - 3, 1);
         break;
-      case '1 tahun':
+      case '1 year':
         customDt = DateTime(dt.year - 1, dt.month, 1);
         break;
-      case 'semua':
+      case 'all':
         customDt = DateTime(2019);
         break;
       default:

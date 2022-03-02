@@ -10,7 +10,7 @@ class ListCashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('List Kas'),
+        title: Text('List Money Cash'),
       ),
       body: ListView.separated(
         itemCount: cashs.length,

@@ -28,10 +28,10 @@ class CurTransaction extends StatelessWidget {
         List<Item> cart = transaction.items;
 
         return AlertDialog(
-          title: Text('Ringkasan'),
+          title: Text('Summary'),
           actions: <Widget>[
-            FlatButton(
-              child: Text('Hapus'),
+            TextButton(
+              child: Text('Delete'),
               onPressed: () => onDelete(transaction),
             ),
             // FlatButton(
@@ -40,8 +40,8 @@ class CurTransaction extends StatelessWidget {
             //     Navigator.pop(context);
             //   },
             // ),
-            FlatButton(
-              child: Text('Kembali'),
+            TextButton(
+              child: Text('Back'),
               onPressed: () {
                 Navigator.pop(context);
               },
@@ -55,7 +55,16 @@ class CurTransaction extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text('Nama : ${transaction.customer.name}'),
+                  Text('Name : ${transaction.customer.name}'),
+                  if (transaction.deposit != 0)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Text(
+                        'Paid with Deposit',
+                        style: TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.normal),
+                      ),
+                    ),
                   ListView.separated(
                     physics: ScrollPhysics(),
                     shrinkWrap: true,
@@ -82,8 +91,7 @@ class CurTransaction extends StatelessWidget {
                       'Total',
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
-                    subtitle:
-                        Text(currencyFormatter.format(transaction.total)),
+                    subtitle: Text(currencyFormatter.format(transaction.total)),
                     trailing: RichText(
                       text: TextSpan(
                         text: 'Profit\n',
@@ -98,10 +106,12 @@ class CurTransaction extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Text(
+                  //   'Pay Deposit : ${currencyFormatter.format(transaction.deposit)}',
+                  // ),
                   Text(
-                      'Bayar deposit : ${currencyFormatter.format(transaction.deposit)}'),
-                  Text(
-                      'Bayar langsung : ${currencyFormatter.format((transaction.deposit - transaction.total).abs())}')
+                    'Paid : ${currencyFormatter.format((transaction.deposit - transaction.total).abs())}',
+                  )
                 ],
               ),
             ),
@@ -128,7 +138,7 @@ class CurTransaction extends StatelessWidget {
 
                 if (transactions.isEmpty) {
                   return Center(
-                    child: Text('Tidak ada transaksi'),
+                    child: Text('Empty Transaction'),
                   );
                 }
                 return Column(
@@ -148,7 +158,7 @@ class CurTransaction extends StatelessWidget {
                           color: Colors.transparent,
                         ),
                         Text(
-                          'Omzet : ${currencyFormatter.format(bloc.omzet)}',
+                          'Revenue : ${currencyFormatter.format(bloc.omzet)}',
                           style: Theme.of(context).textTheme.headline6,
                         ),
                       ],
@@ -177,10 +187,10 @@ class CurTransaction extends StatelessWidget {
                         String dateTime = '${dt.hour}:${dt.minute}';
                         return ListTile(
                           title: Text(
-                            transactions[index].items.fold(
-                                '',
-                                (current, value) =>
-                                    current + value.name + ', '),
+                            transactions[index]
+                                .items
+                                .map((e) => e.name)
+                                .join(', '),
                           ),
                           subtitle: Text(
                             currencyFormatter.format(transactions[index].total),

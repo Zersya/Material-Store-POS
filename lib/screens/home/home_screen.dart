@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Container(
                     width: double.infinity,
                     height: 120,
-                    color: Theme.of(context).colorScheme.primaryVariant,
+                    color: Theme.of(context).colorScheme.primary,
                     child: StreamBuilder<ViewState>(
                         stream: _homeBloc.stateStream,
                         initialData: ViewState.LOADING,
@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: <Widget>[
                     FeatureItem(
                       icon: FontAwesomeIcons.boxes,
-                      name: 'Barang',
+                      name: 'Goods',
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteListItem);
@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     FeatureItem(
                       icon: FontAwesomeIcons.exchangeAlt,
-                      name: 'Transaksi',
+                      name: 'Transaction',
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteFormTransaction);
@@ -89,14 +89,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     FeatureItem(
                       icon: FontAwesomeIcons.wallet,
-                      name: 'Kas',
+                      name: 'Cash Money',
                       onTap: () {
                         Navigator.pushNamed(context, RouterHelper.kRouteCash);
                       },
                     ),
                     FeatureItem(
                       icon: FontAwesomeIcons.list,
-                      name: 'Laporan Keuangan',
+                      name: 'Financial Reports',
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteTransactionReport);
@@ -104,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     FeatureItem(
                       icon: Icons.person,
-                      name: 'Pelanggan',
+                      name: 'Customers',
                       onTap: () {
                         Navigator.pushNamed(
                             context, RouterHelper.kRouteCustomer);
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Center(child: CircularProgressIndicator()));
                   }
                   return CurTransaction(
-                    title: 'Transaksi Hari ini',
+                    title: 'Today Transactions',
                     scrollController: scrollController,
                     bloc: _homeBloc,
                     onUpdate: () {},
@@ -152,11 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text('Konfirmasi Hapus'),
+          title: Text('Confirmation Delete'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
-                'Ya',
+                'Yes',
               ),
               onPressed: () {
                 _homeBloc.deleteTransaction(transaction).then((_) {
@@ -164,8 +164,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
             ),
-            FlatButton(
-              child: Text('Tidak'),
+            TextButton(
+              child: Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -206,17 +206,12 @@ class CardTop extends StatelessWidget {
                 if (snapshot.hasData) {
                   return RichText(
                     text: TextSpan(
-                        text: 'Rp.',
-                        style: Theme.of(context).textTheme.overline,
-                        children: [
-                          TextSpan(
-                              text: currencyFormatter
-                                  .format(snapshot.data.toDouble()),
-                              style: Theme.of(context).textTheme.headline6)
-                        ]),
+                      text: currencyFormatter.format(snapshot.data.toDouble()),
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
                   );
                 }
-                return Container();
+                return SizedBox();
               },
             )
           ],

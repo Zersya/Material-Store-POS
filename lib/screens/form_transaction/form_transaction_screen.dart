@@ -150,16 +150,16 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Kamu ingin membatalkan pesanan ?'),
+          title: Text('Confirmation Cancel Order?'),
           actions: <Widget>[
-            FlatButton(
-              child: Text('Tidak'),
+            ElevatedButton(
+              child: Text('No'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            FlatButton(
-              child: Text('Iya'),
+            ElevatedButton(
+              child: Text('Yes'),
               onPressed: () {
                 _cancelCart();
                 Navigator.pop(context);
@@ -181,15 +181,15 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
             (item) => sum = sum + (int.parse(item.priceSell) * item.pcs));
 
         return AlertDialog(
-          title: Text('Ringkasan'),
+          title: Text('Summary'),
           actions: <Widget>[
-            FlatButton(
-              child: Text('Batal'),
+            ElevatedButton(
+              child: Text('Cancel'),
               onPressed: () {
                 Navigator.pop(context);
               },
             ),
-            FlatButton(
+            ElevatedButton(
               child: Text('Submit'),
               onPressed: () async {
                 String customerName = _controllerCustomerName.text;
@@ -209,7 +209,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    'Pembeli: ${_controllerCustomerName.text.isNotEmpty ? _controllerCustomerName.text : '-'}',
+                    'Buyer: ${_controllerCustomerName.text.isNotEmpty ? _controllerCustomerName.text : '-'}',
                     style: Theme.of(context).textTheme.subtitle2,
                   ),
                   Divider(
@@ -219,7 +219,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                   if (_selectedCustomer != null &&
                       _selectedCustomer.deposit > 0)
                     Text(
-                      'Saldo: ${currencyFormatter.format(_selectedCustomer.deposit)}',
+                      'Balance: ${currencyFormatter.format(_selectedCustomer.deposit)}',
                       style: Theme.of(context).textTheme.subtitle2,
                     ),
                   Divider(
@@ -264,8 +264,9 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       if (_selectedCustomer != null &&
                           _selectedCustomer.deposit > 0)
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: <Widget>[
-                            Text('Sisa'),
+                            Text('Balance Remained: '),
                             Divider(height: 8, color: Colors.transparent),
                             Text(
                               currencyFormatter.format(
@@ -298,13 +299,13 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Transaksi'),
+        title: Text('Transaction'),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Periksa', style: Theme.of(context).textTheme.button),
+          TextButton(
+            child: Text('Inspect', style: Theme.of(context).textTheme.button),
             onPressed: () {
               if (_addTransactionBloc.cart.isEmpty) {
-                _buildShowSnackBar(context, 'Silahkan tambahkan barang');
+                _buildShowSnackBar(context, 'Please add goods');
                 return;
               }
               dialogSummary(context);
@@ -316,10 +317,12 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
         child: Row(
           children: <Widget>[
             Expanded(
-              child: FlatButton(
-                color: Theme.of(context).colorScheme.primary,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Theme.of(context).colorScheme.primary,
+                ),
                 child: Text(
-                  'Batalkan',
+                  'Cancel',
                   style: Theme.of(context).textTheme.button,
                 ),
                 onPressed: () {
@@ -341,26 +344,26 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
                       bool isNew = snapshot.data;
-                      return FlatButton(
-                        color: Theme.of(context).colorScheme.primary,
-                        child: Text(isNew ? 'Tambah baru' : 'Tambahkan',
+                      return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Theme.of(context).colorScheme.primary,
+                        ),
+                        child: Text(isNew ? 'Add New' : 'Add',
                             style: Theme.of(context).textTheme.button),
                         onPressed: () {
                           FocusScope.of(context).unfocus();
                           if (_formKey.currentState.validate()) {
                             if (_controllerName.text.isEmpty) {
                               _buildShowSnackBar(
-                                  context, 'Nama barang tidak boleh kosong');
+                                  context, 'Goods name can\'t be empty');
                             } else if (_controllerPriceBuy.text == '0' ||
                                 _controllerPriceSell.text == '0' ||
                                 _controllerPieces.text == '0') {
-                              _buildShowSnackBar(
-                                  context, 'Bilangan tidak boleh nol');
+                              _buildShowSnackBar(context, 'Value can\'t be 0');
                             } else if (_addTransactionBloc.unitStream.value ==
                                     null ||
                                 _addTransactionBloc.unitStream.value.isEmpty) {
-                              _buildShowSnackBar(
-                                  context, 'Silahkan pilih satuan');
+                              _buildShowSnackBar(context, 'Please select unit');
                             } else {
                               _submitItem2Cart();
                             }
@@ -427,14 +430,14 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Harga beli',
+                          labelText: 'Buy Price',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodePriceSell);
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Harga beli tidak boleh kosong';
+                            return 'Buy Price can\'t be empty';
                           }
                           return null;
                         },
@@ -451,14 +454,14 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                           FilteringTextInputFormatter.digitsOnly,
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Harga jual',
+                          labelText: 'Sell Price',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodePieces);
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Harga jual tidak boleh kosong';
+                            return 'Seel Price can\'t be empty';
                           }
                           return null;
                         },
@@ -481,17 +484,35 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                         keyboardType:
                             TextInputType.numberWithOptions(decimal: true),
                         inputFormatters: [
-                          FilteringTextInputFormatter(RegExp("[0-9,.]"), allow: true),
+                          FilteringTextInputFormatter(RegExp("[0-9,.]"),
+                              allow: true),
                         ],
                         decoration: InputDecoration(
-                          labelText: 'Jumlah satuan',
+                          labelText: 'Quantity',
                         ),
                         onFieldSubmitted: (val) {
                           FocusScope.of(context).requestFocus(_nodeUnit);
+                          FocusScope.of(context).unfocus();
+                          if (_formKey.currentState.validate()) {
+                            if (_controllerName.text.isEmpty) {
+                              _buildShowSnackBar(
+                                  context, 'Goods name can\'t be empty');
+                            } else if (_controllerPriceBuy.text == '0' ||
+                                _controllerPriceSell.text == '0' ||
+                                _controllerPieces.text == '0') {
+                              _buildShowSnackBar(context, 'Value can\'t be 0');
+                            } else if (_addTransactionBloc.unitStream.value ==
+                                    null ||
+                                _addTransactionBloc.unitStream.value.isEmpty) {
+                              _buildShowSnackBar(context, 'Please select unit');
+                            } else {
+                              _submitItem2Cart();
+                            }
+                          }
                         },
                         validator: (val) {
                           if (val.isEmpty) {
-                            return 'Harga jual tidak boleh kosong';
+                            return 'Quantity can\'t be empty';
                           }
                           return null;
                         },
@@ -503,7 +524,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
-                          'Keranjang',
+                          'Cart',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
@@ -544,7 +565,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
           textInputAction: TextInputAction.next,
           autofocus: false,
           decoration: InputDecoration(
-            labelText: 'Nama Pembeli',
+            labelText: 'Customer Name',
           ),
           onChanged: (val) {
             if (val.isEmpty) {
@@ -582,7 +603,7 @@ class _AddTransactionScreenState extends State<FormTransactionScreen> {
           focusNode: _nodeName,
           autofocus: false,
           decoration: InputDecoration(
-            labelText: 'Nama barang',
+            labelText: 'Customer Goods',
           ),
           onChanged: (val) {
             if (val.isEmpty) {

@@ -15,7 +15,7 @@ class CartItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<List<Item>>(
       stream: _addTransactionBloc.cartStream,
-      initialData: List(),
+      initialData: [],
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Item> cart = snapshot.data;
@@ -38,14 +38,14 @@ class CartItem extends StatelessWidget {
                       builder: (context) {
                         return AlertDialog(
                           title: Text(
-                              'Hapus ${cart[index].pcs.toString()} ${cart[index].unit.toString()} ?'),
+                              'Remove ${cart[index].pcs.toString()} ${cart[index].unit.toString()} ?'),
                           actions: <Widget>[
-                            FlatButton(
-                              child: Text('Batal'),
+                            TextButton(
+                              child: Text('Cancel'),
                               onPressed: () => Navigator.pop(context),
                             ),
-                            FlatButton(
-                              child: Text('Hapus'),
+                            TextButton(
+                              child: Text('Remove'),
                               onPressed: () {
                                 _addTransactionBloc.removeFromCart(index);
                                 Navigator.pop(context);

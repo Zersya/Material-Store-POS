@@ -33,7 +33,7 @@ class _CashScreenState extends State<CashScreen> {
     prefixEnum.CashEnum subjectCash = _cashBloc.subjectCash.value;
     if (subjectCash == null) {
       Navigator.of(context).pop();
-      showSnackBar('Silahkan pilih kas keluar atau kas masuk');
+      showSnackBar('Please select money out or money in');
       return;
     }
 
@@ -84,7 +84,7 @@ class _CashScreenState extends State<CashScreen> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Kas'),
+        title: Text('Money'),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -101,7 +101,7 @@ class _CashScreenState extends State<CashScreen> {
             if (cashes.isEmpty) {
               return Center(
                 child: Text(
-                  'Tidak ada kas',
+                  'Money is empty',
                   style: Theme.of(context).textTheme.headline5,
                 ),
               );
@@ -123,7 +123,7 @@ class _CashScreenState extends State<CashScreen> {
                     '${dt.day} ${numberToStrMonth(dt.month)} ${dt.year}';
                 String dateTime = '${dt.hour}:${dt.minute}';
                 String category =
-                    cashes[index].mode == 'CashEnum.IN' ? 'Masuk' : 'Keluar';
+                    cashes[index].mode == 'CashEnum.IN' ? 'In' : 'Out';
                 return ListTile(
                   contentPadding: EdgeInsets.only(left: 16, right: 16.0),
                   leading: Card(
@@ -131,7 +131,7 @@ class _CashScreenState extends State<CashScreen> {
                     child: Container(
                       height: 60,
                       width: 60,
-                      color: category == 'Keluar'
+                      color: category == 'Out'
                           ? Theme.of(context).colorScheme.primaryVariant
                           : Theme.of(context).colorScheme.secondaryVariant,
                       child: Center(
@@ -176,7 +176,7 @@ class _CashScreenState extends State<CashScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               ListTile(
-                                title: Text('Perbaharui'),
+                                title: Text('Update'),
                                 onTap: () {
                                   Navigator.of(context).pop();
                                   showDialogForm(context, cash: cashes[index])
@@ -191,7 +191,7 @@ class _CashScreenState extends State<CashScreen> {
                                 color: Colors.black87,
                               ),
                               ListTile(
-                                title: Text('Hapus'),
+                                title: Text('Delete'),
                                 onTap: () {
                                   Navigator.of(context).pop();
                                   showDialogConfrmDelete(
@@ -219,11 +219,11 @@ class _CashScreenState extends State<CashScreen> {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text('Konfirmasi Hapus'),
+          title: Text('Confirmation Delete'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
-                'Ya',
+                'Yes',
               ),
               onPressed: () {
                 _cashBloc.deleteCash(cash).then((_) {
@@ -231,8 +231,8 @@ class _CashScreenState extends State<CashScreen> {
                 });
               },
             ),
-            FlatButton(
-              child: Text('Tidak'),
+            TextButton(
+              child: Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
@@ -277,7 +277,7 @@ class _CashScreenState extends State<CashScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: <Widget>[
                                       ChoiceChip(
-                                        label: Text('Kas Keluar'),
+                                        label: Text('Money Out'),
                                         selected: snapshot.data ==
                                             prefixEnum.CashEnum.OUT,
                                         labelStyle: TextStyle(
@@ -297,7 +297,7 @@ class _CashScreenState extends State<CashScreen> {
                                         width: 20,
                                       ),
                                       ChoiceChip(
-                                        label: Text('Kas Masuk'),
+                                        label: Text('Money In'),
                                         selected: snapshot.data ==
                                             prefixEnum.CashEnum.IN,
                                         selectedColor: Theme.of(context)
@@ -321,7 +321,7 @@ class _CashScreenState extends State<CashScreen> {
                               focusNode: _nodeDesc,
                               textInputAction: TextInputAction.next,
                               decoration: InputDecoration(
-                                labelText: 'Keterangan kas',
+                                labelText: 'Money description',
                               ),
                               onFieldSubmitted: (val) {
                                 FocusScope.of(context)
@@ -329,7 +329,7 @@ class _CashScreenState extends State<CashScreen> {
                               },
                               validator: (val) {
                                 if (val.isEmpty) {
-                                  return 'Keterangan tidak boleh kosong';
+                                  return 'Description is required';
                                 }
                                 return null;
                               },
@@ -346,7 +346,7 @@ class _CashScreenState extends State<CashScreen> {
                                 FilteringTextInputFormatter.digitsOnly,
                               ],
                               decoration: InputDecoration(
-                                labelText: 'Nilai kas',
+                                labelText: 'Value money',
                               ),
                               onFieldSubmitted: (val) {
                                 _submitCash(cash);
@@ -354,9 +354,9 @@ class _CashScreenState extends State<CashScreen> {
                               },
                               validator: (val) {
                                 if (val.isEmpty) {
-                                  return 'Nilai kas tidak boleh kosong';
+                                  return 'Value can\'t be empty';
                                 } else if (val == '0') {
-                                  return 'Nilai kas tidak boleh nol';
+                                  return 'Value can\'t be 0';
                                 }
                                 return null;
                               },
@@ -372,10 +372,12 @@ class _CashScreenState extends State<CashScreen> {
                   child: Container(
                     width: double.infinity,
                     height: 50,
-                    child: FlatButton(
-                      color: Theme.of(context).colorScheme.primary,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).colorScheme.primary,
+                      ),
                       child: Text(
-                        cash != null ? 'Perbaharui' : 'Tambahkan',
+                        cash != null ? 'Update' : 'Add',
                         style: Theme.of(context).textTheme.button,
                       ),
                       onPressed: () {

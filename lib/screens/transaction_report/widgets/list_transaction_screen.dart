@@ -11,12 +11,12 @@ class ListTransactionScreen extends StatelessWidget {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('List Transaksi'),
+        title: Text('List Transaction'),
       ),
       body: SingleChildScrollView(
         physics: ScrollPhysics(),
         child: CurTransaction(
-          title: 'Transaksi',
+          title: 'Transactions',
           scrollController: params.scrollController,
           bloc: params.reportBloc,
           onUpdate: () {},
@@ -34,11 +34,11 @@ class ListTransactionScreen extends StatelessWidget {
       context: context,
       builder: (_) {
         return AlertDialog(
-          title: Text('Konfirmasi Hapus'),
+          title: Text('Confirmation Delete'),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
               child: Text(
-                'Ya',
+                'Yes',
               ),
               onPressed: () {
                 params.reportBloc.deleteTransaction(transaction).then((_) {
@@ -46,8 +46,8 @@ class ListTransactionScreen extends StatelessWidget {
                 });
               },
             ),
-            FlatButton(
-              child: Text('Tidak'),
+            TextButton(
+              child: Text('No'),
               onPressed: () {
                 Navigator.of(context).pop(false);
               },

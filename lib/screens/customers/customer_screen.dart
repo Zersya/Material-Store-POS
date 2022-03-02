@@ -35,7 +35,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title:
-            Text(customer != null ? 'Update pelanggan' : 'Tambah pelanggan'),
+            Text(customer != null ? 'Update customer' : 'Add customer'),
         content: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -44,13 +44,13 @@ class _CustomerScreenState extends State<CustomerScreen> {
                 TextFormField(
                   focusNode: _nodeName,
                   controller: _controllerName,
-                  decoration: InputDecoration(labelText: 'Nama'),
+                  decoration: InputDecoration(labelText: 'Name'),
                   onFieldSubmitted: (val) {
                     FocusScope.of(context).requestFocus(_nodeDepo);
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Nama tidak boleh kosong';
+                      return 'Name cannot be empty';
                     }
                     return null;
                   },
@@ -66,7 +66,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
                   },
                   validator: (value) {
                     if (value.isEmpty) {
-                      return 'Deposit tidak boleh kosong';
+                      return 'Deposit cannot be empty';
                     }
                     return null;
                   },
@@ -76,14 +76,14 @@ class _CustomerScreenState extends State<CustomerScreen> {
           ),
         ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Batal'),
+          TextButton(
+            child: Text('Cancel'),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          FlatButton(
-            child: Text('Simpan'),
+          TextButton(
+            child: Text('Save'),
             onPressed: () {
               if (_formKey.currentState.validate()) {
                 Customer newCustomer = customer != null
@@ -115,7 +115,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pelanggan'),
+        title: Text('Customers'),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -133,7 +133,7 @@ class _CustomerScreenState extends State<CustomerScreen> {
           }
           if (snapshot.data.isEmpty) {
             return Center(
-              child: Text('Data pelanggan kosong'),
+              child: Text('Customers is empty'),
             );
           }
           return ListView.separated(

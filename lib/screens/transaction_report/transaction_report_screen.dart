@@ -29,7 +29,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Laporan Transaksi'),
+        title: Text('Transaction Report'),
       ),
       body: SafeArea(
         child: Stack(
@@ -53,36 +53,36 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                         children: <Widget>[
                           StreamBuilder<String>(
                             stream: _reportBloc.timeSelectStream,
-                            initialData: 'semua',
+                            initialData: 'all',
                             builder: (context, snapshot) {
                               return DropdownButton(
                                 value: snapshot.data,
                                 isExpanded: true,
-                                hint: Text('Pilih Waktu'),
+                                hint: Text('Select Time'),
                                 onChanged: (val) {
-                                  _reportBloc.subjectTimeSelect.sink.add(val);
                                   _reportBloc.getDateTime();
+                                  _reportBloc.subjectTimeSelect.sink.add(val);
                                 },
                                 items: [
                                   DropdownMenuItem(
-                                    value: '1 minggu',
-                                    child: Text('Minggu ini'),
+                                    value: '1 week',
+                                    child: Text('This week'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '1 bulan',
-                                    child: Text('1 Bulan Terakhir'),
+                                    value: '1 month',
+                                    child: Text('Last one month'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '3 bulan',
-                                    child: Text('3 Bulan Terakhir'),
+                                    value: '3 months',
+                                    child: Text('Last three months'),
                                   ),
                                   DropdownMenuItem(
-                                    value: '1 tahun',
-                                    child: Text('1 Tahun Terakhir'),
+                                    value: '1 year',
+                                    child: Text('Last one year'),
                                   ),
                                   DropdownMenuItem(
-                                    value: 'semua',
-                                    child: Text('Seluruh Data'),
+                                    value: 'all',
+                                    child: Text('All Data'),
                                   ),
                                 ],
                               );
@@ -225,7 +225,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                 stream: _reportBloc.subjectTimeSelect,
                 builder: (context, snapshot) {
                   return Text(
-                    'Kas ${_reportBloc.subjectTimeSelect.value}',
+                    'Money ${_reportBloc.subjectTimeSelect.value}',
                     style: Theme.of(context).textTheme.headline6,
                   );
                 }),
@@ -239,7 +239,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                     arguments: _reportBloc.cashsOut);
               },
               trailing: Icon(Icons.open_in_new),
-              title: Text('Kas Keluar'),
+              title: Text('Money Out'),
               subtitle: StreamBuilder<String>(
                   stream: _reportBloc.subjectCashOut,
                   initialData: '0',
@@ -258,7 +258,7 @@ class _TransactionReportScreenState extends State<TransactionReportScreen> {
                     arguments: _reportBloc.cashsIn);
               },
               trailing: Icon(Icons.open_in_new),
-              title: Text('Kas Masuk'),
+              title: Text('Money In'),
               subtitle: StreamBuilder<String>(
                   stream: _reportBloc.subjectCashIn,
                   initialData: '0',
@@ -336,7 +336,7 @@ class InformationTime extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Tanggal Mulai',
+                  'Start Date',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2
@@ -359,7 +359,7 @@ class InformationTime extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Tanggal Selesai',
+                  'End Date',
                   style: Theme.of(context)
                       .textTheme
                       .subtitle2

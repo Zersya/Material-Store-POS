@@ -52,12 +52,12 @@ class _ListItemScreenState extends State<ListItemScreen>
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Detail barang'),
+        title: Text('Detail Goods'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             ListTile(
-              title: Text('Nama barang'),
+              title: Text('Goods name'),
               subtitle: Text(item.name),
             ),
             Divider(
@@ -65,7 +65,7 @@ class _ListItemScreenState extends State<ListItemScreen>
               color: Colors.black54,
             ),
             ListTile(
-              title: Text('Harga beli'),
+              title: Text('Goods buy price'),
               subtitle:
                   Text(currencyFormatter.format(double.parse(item.priceBuy))),
             ),
@@ -74,7 +74,7 @@ class _ListItemScreenState extends State<ListItemScreen>
               color: Colors.black54,
             ),
             ListTile(
-              title: Text('Harga jual'),
+              title: Text('Goods sell price'),
               subtitle:
                   Text(currencyFormatter.format(double.parse(item.priceSell))),
             ),
@@ -83,14 +83,14 @@ class _ListItemScreenState extends State<ListItemScreen>
               color: Colors.black54,
             ),
             ListTile(
-              title: Text('Satuan barang'),
+              title: Text('Unit of goods'),
               subtitle: Text(item.unit),
             ),
           ],
         ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Hapus'),
+          TextButton(
+            child: Text('Delete'),
             onPressed: () {
               Navigator.pop(context);
               _listItemBloc.deleteItem(item);

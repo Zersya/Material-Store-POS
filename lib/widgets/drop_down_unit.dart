@@ -19,20 +19,20 @@ class DropdownUnit extends StatelessWidget {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Tambah satuan'),
+        title: Text('Add unit'),
         content: TextField(
           controller: controllerUnit,
-          decoration: InputDecoration(labelText: 'contoh : kg'),
+          decoration: InputDecoration(labelText: 'example : kg'),
         ),
         actions: <Widget>[
-          FlatButton(
-            child: Text('Batal'),
+          TextButton(
+            child: Text('Cancel'),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          FlatButton(
-            child: Text('Tambah'),
+          TextButton(
+            child: Text('Add'),
             onPressed: () {
               Unit unit = Unit(
                 controllerUnit.text.toLowerCase(),
@@ -73,7 +73,7 @@ class DropdownUnit extends StatelessWidget {
                           focusNode: _nodeUnit,
                           value: snapshot_2.data,
                           isExpanded: true,
-                          hint: Text('Pilih satuan'),
+                          hint: Text('Select unit'),
                           onChanged: (val) {
                             _addTransactionBloc.subjectUnitValue.sink.add(val);
                           },

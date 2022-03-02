@@ -8,19 +8,19 @@ NumberFormat currencyFormatter = NumberFormat.currency(
 String numberToStrDay(int number) {
   switch (number) {
     case 1:
-      return 'Senin';
+      return 'Monday';
     case 2:
-      return 'Selasa';
+      return 'Tuesday';
     case 3:
-      return 'Rabu';
+      return 'Wednesday';
     case 4:
-      return 'Kamis';
+      return 'Thursday';
     case 5:
-      return 'Jum\'at';
+      return 'Friday';
     case 6:
-      return 'Sabtu';
+      return 'Saturday';
     case 7:
-      return 'Minggu';
+      return 'Sunday';
     default:
       return '';
   }
@@ -37,13 +37,13 @@ String numberToStrMonth(int number) {
     case 4:
       return 'Apr';
     case 5:
-      return 'Mei';
+      return 'May';
     case 6:
       return 'Jun';
     case 7:
       return 'Jul';
     case 8:
-      return 'Agu';
+      return 'Aug';
     case 9:
       return 'Sep';
     case 10:
@@ -51,7 +51,7 @@ String numberToStrMonth(int number) {
     case 11:
       return 'Nov';
     case 12:
-      return 'Des';
+      return 'Dec';
     default:
       return '';
   }
