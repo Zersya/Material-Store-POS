@@ -6,7 +6,7 @@ import 'package:harco_app/services/customer_base_service.dart';
 import 'package:harco_app/utils/enum.dart';
 import 'package:harco_app/models/transaction.dart' as prefTrans;
 
-class TransactionService extends CustomerBaseService{
+class TransactionService extends CustomerBaseService {
   final FirebaseFirestore firestore;
 
   TransactionService(this.firestore) : super(firestore);
@@ -14,8 +14,7 @@ class TransactionService extends CustomerBaseService{
   Future<MyResponse> createTransaction(
       prefTrans.Transaction transaction) async {
     try {
-      transaction.id =
-          firestore.collection('transactions').doc().id;
+      transaction.id = firestore.collection('transactions').doc().id;
 
       await firestore
           .collection('transactions')
@@ -42,9 +41,8 @@ class TransactionService extends CustomerBaseService{
       Stream<QuerySnapshot> snapshot = firestore
           .collection('transactions')
           .where('createdAt',
-              isGreaterThan:
-                  new DateTime(now.year, now.month, now.day, 00, 00)
-                      .millisecondsSinceEpoch)
+              isGreaterThan: new DateTime(now.year, now.month, now.day, 00, 00)
+                  .millisecondsSinceEpoch)
           .snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
@@ -60,8 +58,10 @@ class TransactionService extends CustomerBaseService{
 
   Future<MyResponse> fetchTransactionAll() async {
     try {
-      Stream<QuerySnapshot> snapshot =
-          firestore.collection('transactions').orderBy('createdAt', descending: true).snapshots();
+      Stream<QuerySnapshot> snapshot = firestore
+          .collection('transactions')
+          .orderBy('createdAt', descending: true)
+          .snapshots();
 
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, snapshot,
           message: null);
@@ -74,9 +74,14 @@ class TransactionService extends CustomerBaseService{
     }
   }
 
-  Future<MyResponse> deleteTransaction(String id) async {
+  Future<MyResponse> deleteTransaction(prefTrans.Transaction trx) async {
     try {
+      final id = trx.id;
+
       firestore.collection('transactions').doc(id).delete();
+      firestore.collection('customers').doc(trx.customer.id).update({
+        'deposit': FieldValue.increment(trx.deposit - trx.customer.deposit)
+      });
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
           message: 'Sukses menghapus barang');
     } on SocketException {

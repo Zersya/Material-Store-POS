@@ -39,7 +39,7 @@ class HomeBloc extends TransBaseHelper {
     this.subjectState.sink.add(ViewState.LOADING);
     transactions.removeWhere((val) => val.id == transaction.id);
     this.subjectTransactions.sink.add(transactions);
-    MyResponse response = await transactionService.deleteTransaction(transaction.id);
+    MyResponse response = await transactionService.deleteTransaction(transaction);
     this.subjectResponse.sink.add(response);
     this.subjectState.sink.add(ViewState.IDLE);
   }

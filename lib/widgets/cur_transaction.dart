@@ -106,12 +106,38 @@ class CurTransaction extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Text(
-                  //   'Pay Deposit : ${currencyFormatter.format(transaction.deposit)}',
-                  // ),
-                  Text(
-                    'Paid : ${currencyFormatter.format((transaction.deposit - transaction.total).abs())}',
-                  )
+                  if (transaction.deposit != 0)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Paid by Deposit : ${currencyFormatter.format(transaction.deposit - transaction.customer.deposit)}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        if ((transaction.total - transaction.deposit) > 0)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              'Paid by Cash : ${currencyFormatter.format(transaction.total - transaction.deposit)}',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ),
+                      ],
+                    )
+                  else
+                    Text(
+                      'Paid : ${currencyFormatter.format((transaction.total).abs())}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    )
                 ],
               ),
             ),
