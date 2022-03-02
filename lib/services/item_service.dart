@@ -24,10 +24,10 @@ class ItemService {
       });
 
       return MyResponse(ResponseState.SUCCESS, item,
-          message: 'Berhasil menambah barang');
+          message: 'Success add item');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
@@ -46,10 +46,10 @@ class ItemService {
       });
 
       return MyResponse(ResponseState.SUCCESS, unit,
-          message: 'Berhasil menambah satuan');
+          message: 'Success add unit');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
@@ -63,7 +63,7 @@ class ItemService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');
@@ -74,10 +74,10 @@ class ItemService {
     try {
       firestore.collection('items').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
-          message: 'Sukses menghapus barang');
+          message: 'Success delete item');
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');
@@ -92,7 +92,7 @@ class ItemService {
   //         message: null);
   //   } on SocketException {
   //     return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-  //         message: 'Kesalahan jaringan');
+  //         message: 'Network Error');
   //   } on Exception {
   //     return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
   //         message: 'Terjadi kesalahan');
@@ -107,7 +107,7 @@ class ItemService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');

@@ -25,10 +25,9 @@ class TransactionService extends CustomerBaseService {
       });
 
       return MyResponse(ResponseState.SUCCESS, transaction,
-          message: 'Berhasil menambah transaksi', code: 'SUCCESS_ADD_TRANS');
+          message: 'Success add transaction', code: 'SUCCESS_ADD_TRANS');
     } on SocketException {
-      return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+      return MyResponse(ResponseState.ERROR, null, message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
@@ -49,7 +48,7 @@ class TransactionService extends CustomerBaseService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');
@@ -67,7 +66,7 @@ class TransactionService extends CustomerBaseService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');
@@ -86,7 +85,7 @@ class TransactionService extends CustomerBaseService {
           message: 'Sukses menghapus barang');
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');

@@ -18,7 +18,7 @@ class CustomerBaseService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
           message: 'Terjadi kesalahan');
@@ -44,10 +44,10 @@ class CustomerBaseService {
       });
 
       return MyResponse(ResponseState.SUCCESS, null,
-          message: 'Berhasil menambah customer');
+          message: 'Success add customer');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
@@ -64,10 +64,10 @@ class CustomerBaseService {
       });
 
       return MyResponse(ResponseState.SUCCESS, null,
-          message: 'Berhasil menambah customer');
+          message: 'Success update customer');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }

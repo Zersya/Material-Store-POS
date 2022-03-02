@@ -112,7 +112,7 @@ class _ListItemScreenState extends State<ListItemScreen>
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text('Daftar barang'),
+        title: Text('List Goods'),
       ),
       floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

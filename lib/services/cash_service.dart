@@ -24,10 +24,10 @@ class CashService {
       });
 
       return MyResponse(ResponseState.SUCCESS, cash,
-          message: 'Berhasil menambah kas');
+          message: 'Success added cash');
     } on SocketException {
       return MyResponse(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception catch (err) {
       return MyResponse(ResponseState.ERROR, null, message: err.toString());
     }
@@ -48,10 +48,10 @@ class CashService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Terjadi kesalahan');
+          message: 'Unknown Error');
     }
   }
 
@@ -64,10 +64,10 @@ class CashService {
           message: null);
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Terjadi kesalahan');
+          message: 'Unknown Error');
     }
   }
 
@@ -75,13 +75,13 @@ class CashService {
     try {
       firestore.collection('cashes').doc(id).delete();
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.SUCCESS, null,
-          message: 'Sukses menghapus kas');
+          message: 'Success deleted cash');
     } on SocketException {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Kesalahan jaringan');
+          message: 'Network Error');
     } on Exception {
       return MyResponse<Stream<QuerySnapshot>>(ResponseState.ERROR, null,
-          message: 'Terjadi kesalahan');
+          message: 'Unknown Error');
     }
   }
 }
